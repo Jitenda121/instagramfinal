@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/res/component/app_images.dart';
+//import 'package:flutter_application_1/view/bottom_navigationbartab.dart/account.dart';
+import 'package:flutter_application_1/view/bottom_navigationbartab/account.dart';
+import 'package:lottie/lottie.dart';
+////import 'package:flutter_application_1/view/tab1home/account.dart';
 
 import '../view_model/viewmodel/custom_text.dart';
-import 'owner_profile.dart';
+//import 'owner_profile.dart';
 //import 'package:instragram_clone/view/owner_profile_screen.dart';
 //import 'package:instragram_clone/view_model/widget/custom.dart';
 
@@ -80,8 +85,8 @@ class _EditProfileState extends State<EditProfile> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               CircleAvatar(
-                radius: 60,
-              )
+                  radius: 60,
+                  backgroundImage: AssetImage("images/images (1).jpeg"))
             ],
           ),
           Text(
@@ -95,7 +100,6 @@ class _EditProfileState extends State<EditProfile> {
                 prefixIcon: Icons.account_box,
                 hintText: "search",
                 controller: usernamcontroller,
-
               ))
         ],
       ),

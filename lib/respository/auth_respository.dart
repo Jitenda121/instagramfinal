@@ -1,34 +1,40 @@
 import 'dart:convert';
-//import 'dart:js';
-//import 'dart:js';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/data/network/base_api_services.dart';
 import 'package:flutter_application_1/data/network/network_services.dart';
 import 'package:flutter_application_1/res/component/app_url.dart';
+import 'package:flutter_application_1/respository/shared_preference.dart';
+import 'package:flutter_application_1/utils/utils.dart';
 import 'package:flutter_application_1/view/forget_password.dart';
+import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 class AuthRepository {
   //final  String token1=verifyOtpApi(data).toString();
   BaseApiServices _apiServices = NetworkApiService();
   Future<dynamic> loginapi(dynamic data) async {
     try {
-      // dynamic header=
       dynamic response = await _apiServices.getPostApiResponse(
           AppUrl.loginapi, data,
           header: {"Content-Type": "application/json; charset=UTF-8"});
-      debugPrint("@@@@@@@@@@@@@@@@@@");
-      if (response is String) {
-        // If the response is a JSON string, parse it
-        Map<String, dynamic> parsedResponse = json.decode(response);
-        debugPrint(parsedResponse.toString());
-        return parsedResponse;
-      } else if (response is Map<String, dynamic>) {
+
+      if (response is Map<String, dynamic>) {
         // If the response is already a Map, no need to parse it
+        final String accessToken = response['data']['accessToken'];
         debugPrint(response.toString());
+        String userId = response['data']['user']["_id"];
+        SharedPreferencesManager.saveUserId(userId);
+
+        debugPrint("--------------------------");
+        SharedPreferencesManager.saveLoginToken(accessToken);
+        String? loginToken = await SharedPreferencesManager.getLoginToken();
+        // debugPrint(accessToken.toString());
+        debugPrint("------***************----************---------------");
+        debugPrint(loginToken);
+
         return response;
       } else {
-        // Handle other response types if necessary
         throw Exception("Unexpected response type");
       }
     } catch (e) {
@@ -38,7 +44,7 @@ class AuthRepository {
 
   Future<dynamic> signupApi(dynamic data) async {
     try {
-      dynamic header = {"NAME": "socailMedia", "PASS": "social@123"};
+      dynamic header = {"NAME": "socialMedia", "PASS": "social@123"};
       dynamic response = await NetworkApiService()
           .getPostApiResponseWithHeader(AppUrl.signupapi, data);
       debugPrint(response.toString());
@@ -62,8 +68,6 @@ class AuthRepository {
 
       return isValid;
     } catch (e) {
-      // Handle errors here, such as network issues or server errors
-      // You can log the error or throw it back to the calling function
       rethrow;
     }
   }
@@ -74,21 +78,24 @@ class AuthRepository {
       dynamic response = await _apiServices.getPostApiResponse(
           AppUrl.forgetotpapi, data,
           header: {"Content-Type": "application/json; charset=UTF-8"});
+      debugPrint(response.toString());
+      if (response['statusCode'] == 200) {
+        final String resetPasswordToken =
+            response['data']['resetPasswordToken'];
+        debugPrint("-----nvdonbvoidsobijjbo---------------");
+        debugPrint('Reset Password Token: $resetPasswordToken');
+        SharedPreferencesManager.saveResetPasswordToken(resetPasswordToken);
+        String resetToken =
+            (await SharedPreferencesManager.getResetPasswordToken())!;
+        // debugPrint(accessToken.toString());
+        debugPrint("------***************----************---------------");
+        debugPrint(resetToken);
 
-      // Assuming your API response contains a key 'isValid' indicating whether the OTP is valid or not
-      bool isValid = response['isValid'] ?? true;
-      debugPrint("%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+        return true;
+      }
 
-      String token = response["data"]["resetPasswordToken"];
-      //Navigator.push(context,MaterialPageRoute(builder: (context)=>))
-      // Navigator.push(context,MaterialPageRoute(builder:(context)=>))
-
-      print(token);
-
-      return isValid;
+      return false;
     } catch (e) {
-      // Handle errors here, such as network issues or server errors
-      // You can log the error or throw it back to the calling function
       rethrow;
     }
   }
@@ -101,42 +108,134 @@ class AuthRepository {
 
   Future<void> resendOtpApi(dynamic data) async {
     // Replace 'AppUrl.resendOtpApi' with your actual OTP resend API endpoint
-    await _apiServices.getPostApiResponse(AppUrl.resendOtpApi, data,
+    await _apiServices.getPostApiResponse(AppUrl.forgetpassword, data,
         header: {"Content-Type": "application/json; charset=UTF-8"});
   }
 
-  Future<String> resetPasswordApi(String newPassword) async {
+  Future<dynamic> resetPasswordApi(
+    dynamic data,
+  ) async {
+    String? authToken = await SharedPreferencesManager.getResetPasswordToken();
+    debugPrint("@@@@@@@@@@@@@@@@@@@@@@@!&&&&&&&&&&&&&&&&&&&&&&&&");
+    debugPrint(authToken.toString());
+    debugPrint("dfghjkldfghjkcvhbjkffghjkcfghj");
+    debugPrint("Requesting password reset API with token: $authToken");
+    debugPrint("Request Data: $data");
     try {
-      // Replace 'AppUrl.resetPasswordApi' with your actual reset password API endpoint
       dynamic response = await _apiServices.getPostApiResponse(
         AppUrl.resetpasswordapi,
-        {"newPassword": newPassword},
-        header: {"Content-Type": "application/json; charset=UTF-8"},
+        data,
+        header: {
+          "Content-Type": "application/json; charset=UTF-8",
+          "Authorization": "Bearer $authToken",
+        },
       );
-
-      // Assuming your API response contains a key 'token' indicating the new token after password reset
-      String token = response['token'];
-      debugPrint("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-      debugPrint(response.toString());
-
-      // Store the new token in SharedPreferences for future use
-      await _storeToken(token);
-
-      return token;
     } catch (e) {
-      // Handle errors here, such as network issues or server errors
-      // You can log the error or throw it back to the calling function
+      print(Response);
+      debugPrint("Error during API call: $e");
       rethrow;
     }
   }
 
-  Future<void> _storeToken(String token) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('token', token);
+  Future<void> toggleLikeApi(String postId) async {
+    try {
+      debugPrint("#####################");
+      dynamic response = await _apiServices.getPostApiResponse(
+        '${AppUrl.postlike}/$postId', // Adjust the endpoint URL
+        null, // You might need to send additional data here, if required
+        header: {
+          "Content-Type": "application/json; charset=UTF-8",
+          //"Authorization": "Bearer $authToken", // Add the authentication token here
+        },
+      );
+    } catch (e) {
+      rethrow;
+    }
   }
 
-  Future<String> getToken() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString('token') ?? '';
+  Future<void> logoutApi(String? authToken) async {
+    if (authToken == null) {
+      print("No authToken found.");
+      return;
+    }
+
+    try {
+      // ...
+    } catch (error) {
+      // ...
+    }
+  }
+
+  Future<void> createPostApi(dynamic data) async {
+    String? authToken = await SharedPreferencesManager.getLoginToken();
+
+    try {
+      debugPrint("--------------@@@@@@@@@@@@@@@@---------");
+      debugPrint(authToken);
+      // Send a POST request to the create post API endpoint
+      dynamic response = await _apiServices.getPostApiResponse(
+        AppUrl.createpost, // Replace with your create post API endpoint
+        data, // Convert data to JSON
+        header: {
+          "Content-Type": "application/json; charset=UTF-8",
+          "Authorization":
+              "Bearer $authToken", // Add the authentication token here
+        },
+      );
+
+      // Handle the response as needed (parsing, error handling, etc.)
+      debugPrint("Create Post API Response: $response");
+    } catch (error) {
+      // Handle error if needed
+      print("Error during create post API call: $error");
+      rethrow;
+    }
+  }
+
+  Future<void> deleteUserPostApi(String postId) async {
+    String? authToken = await SharedPreferencesManager.getLoginToken();
+    debugPrint(authToken.toString());
+    debugPrint("dfhgjklfhgjkhjghgjkhgcvjhvgvbb");
+    debugPrint(postId.toString());
+    debugPrint("dxfgchjgk");
+
+    try {
+      // Send a DELETE request to the delete user post API endpoint
+      await _apiServices.getDeleteApiResponse(
+        '${AppUrl.deleteUserPost}?postId=$postId', // Adjust the endpoint URL with postId
+        header: {
+          "Content-Type": "application/json; charset=UTF-8",
+          "Authorization": "$authToken",
+        },
+        // Response(body, statusCode)
+        // debugPrint(Response(body, statusCode))
+      );
+      //   Response response = await _apiServices.getDeleteApiResponse(
+      //     '${AppUrl.deleteUserPost}?postId=$postId', // Adjust the endpoint URL with postId
+      //     header: {
+      //       "Content-Type": "application/json; charset=UTF-8",
+      //       "Authorization": "$authToken",
+      //     },
+      //   );
+      //   debugPrint('Response Status Code: ${response.statusCode}');
+      // debugPrint('Response Body: ${response.body}');
+
+      //   if (response.statusCode == 200) {
+      //     // Successful deletion
+      //     Utils.toastMessage("Post deleted successfully!!!!!!!!!!!!");
+      //   } else if (response.statusCode == 400) {
+      //     // Bad Request error
+      //     // Handle the error response here
+      //     var errorMessage = json.decode(response.body)['error'];
+      //     Utils.toastMessage(errorMessage);
+      //   } else {
+      //     // Handle other status codes as needed
+      //   }
+    } catch (error) {
+      // Handle error if needed
+      debugPrint(error.toString());
+      debugPrint("Error during delete user post API call: $error");
+      rethrow;
+    }
   }
 }

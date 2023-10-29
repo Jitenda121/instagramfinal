@@ -1,27 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/provider/auth_provider.dart';
+import 'package:flutter_application_1/provider/home_view_model.dart';
 import 'package:flutter_application_1/provider/imagedelete.dart';
 import 'package:flutter_application_1/provider/sign_up.dart';
 import 'package:flutter_application_1/utils/routes/routes.dart';
-import 'package:flutter_application_1/utils/routes/routes_name.dart';
-import 'package:flutter_application_1/view/complete_profile.dart';
-import 'package:flutter_application_1/view/forget_password.dart';
-//import 'package:flutter_application_1/view/forget_password.dart';
-
 import 'package:flutter_application_1/view/homepage.dart';
-import 'package:flutter_application_1/view/login_screen.dart';
 import 'package:flutter_application_1/view/new_password_screen.dart';
 import 'package:flutter_application_1/view/otp_screen.dart';
 import 'package:flutter_application_1/view/sign_up.dart';
+import 'package:flutter_application_1/view/splash_screen.dart';
 import 'package:flutter_application_1/view_model/viewmodel/auth_view_model.dart';
-//import 'package:flutter_application_1/view/login_screen.dart';
-//import 'package:flutter_application_1/view/otp_screen.dart';
-//import 'package:flutter_application_1/view/owner_profile.dart';
-//import 'package:flutter_application_1/view/search_page.dart';
-//import 'package:flutter_application_1/view/sign_up.dart';
-//import 'package:flutter_application_1/view/splash_screen.dart';
-//import 'package:flutter_application_1/view/tutorial1.dart';
-
+//import 'package:flutter_application_1/view_model/viewmodel/user_view_model.dart';
 import 'package:provider/provider.dart';
 
 late Size mq;
@@ -42,18 +31,10 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        // ChangeNotifierProvider(
-        //   create: (_) => CountProvider(),
-        // ),
-        // ChangeNotifierProvider(
-        //   create: (_) => ExampleTwoProvider(),
-        // ),
-        // ChangeNotifierProvider(
-        //   create: (_) => SignUpScreen(),
-        // ),
-
+        ChangeNotifierProvider(create: (context) => HomeViewModel()),
         ChangeNotifierProvider(create: (context) => ImageProviderModel()),
         ChangeNotifierProvider(create: (context) => AuthViewModel()),
+        //ChangeNotifierProvider(create: (context) => UserViewModel()),
         ChangeNotifierProvider(
           create: (_) => AuthProvider(),
         ),
@@ -62,12 +43,12 @@ class _MyAppState extends State<MyApp> {
         )
       ],
       child: MaterialApp(
-          theme: ThemeData(
-            colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
-            useMaterial3: true,
-          ),
+          // theme: ThemeData(
+          //   colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+          //   useMaterial3: true,
+          // ),
           debugShowCheckedModeBanner: false,
-          home: LoginScreen(),
+          home: SpalshScreen(),
           onGenerateRoute: Routes.MaterialPageRoutegenerateRoute),
     );
     // return MaterialApp(

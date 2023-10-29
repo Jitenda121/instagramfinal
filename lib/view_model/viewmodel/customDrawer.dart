@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/utils/routes/routes_name.dart';
+import 'package:flutter_application_1/view_model/viewmodel/auth_view_model.dart';
+import 'package:provider/provider.dart';
 //import 'package:flutter_application_1/view/homepage.dart';
 //import 'package:flutter_application_1/view/login_screen.dart';
 //import 'package:flutter_application_1/view/owner_profile.dart';
@@ -9,6 +11,7 @@ class CustomDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final authViewModel = Provider.of<AuthViewModel>(context);
     return Drawer(
       child: ListView(children: [
         const DrawerHeader(
@@ -40,8 +43,8 @@ class CustomDrawer extends StatelessWidget {
             style: TextStyle(fontSize: 17, fontWeight: FontWeight.w700),
           ),
           onTap: () {
-            Navigator.pop(context);
-            Navigator.pushNamed(context, RoutesName.homepage);
+            //Navigator.pop(context);
+            //Navigator.pushNamed(context, RoutesName.homepage);
             // Navigator.push(
             //     context, MaterialPageRoute(builder: (context) => HomePage()));
           },
@@ -57,12 +60,11 @@ class CustomDrawer extends StatelessWidget {
           ),
           onTap: () {
             Navigator.pop(context);
-            Navigator.pushNamed(context, RoutesName.owner);
+            // Navigator.pushNamed(context, RoutesName.owner);
             // Navigator.of(context)
             //     .push(MaterialPageRoute(builder: (context) => OwnerProfile()));
           },
         ),
-
         const Divider(
           thickness: 5,
         ),
@@ -149,8 +151,9 @@ class CustomDrawer extends StatelessWidget {
                         // Navigator.of(context).pushReplacement(MaterialPageRoute(
                         //     builder: (context) => LoginScreen()));
                         //  Navigator.of(context).pop(); // Close the dialog
-                        Navigator.pushReplacementNamed(
-                            context, RoutesName.loginscreen);
+                        // Navigator.pushReplacementNamed(
+                        //     context, RoutesName.loginscreen);
+                        authViewModel.logout(context);
                       },
                       child: const Text("Logout"),
                     ),

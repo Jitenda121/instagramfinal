@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/res/colors.dart';
-class CustomRoundButton extends StatelessWidget {
+
+class CustomButton extends StatelessWidget {
   final String title;
   final bool loading;
   final VoidCallback onPress;
 
-  const CustomRoundButton(
+  const CustomButton(
       {Key? key,
       required this.title,
       this.loading = false,
@@ -17,8 +18,7 @@ class CustomRoundButton extends StatelessWidget {
       onTap: onPress,
       child: Container(
         height: 50,
-        width: 200,
-      
+        width: 100,
         child: Center(
             child: loading
                 ? CircularProgressIndicator(

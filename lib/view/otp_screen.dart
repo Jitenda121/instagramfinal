@@ -5,6 +5,7 @@ import 'package:flutter_application_1/res/component/round_button.dart';
 import 'package:flutter_application_1/utils/routes/routes_name.dart';
 import 'package:flutter_application_1/utils/utils.dart';
 import 'package:flutter_application_1/view_model/viewmodel/auth_view_model.dart';
+import 'package:flutter_application_1/view_model/viewmodel/custombutton.dart';
 import 'package:lottie/lottie.dart';
 import 'package:pinput/pinput.dart';
 import 'package:provider/provider.dart';
@@ -27,10 +28,7 @@ class _OTPState extends State<OTP> {
   Widget build(BuildContext context) {
     debugPrint("--------------------------\n${widget.userEmail}");
     final authViewModel1 = Provider.of<AuthViewModel>(context);
-    //final authViewModel1
-    // final Map<String, dynamic> arguments =
-    //     ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-    // String? email = arguments['email'];
+    
     return Scaffold(
       backgroundColor: Colors.white,
       body: Form(
@@ -57,12 +55,19 @@ class _OTPState extends State<OTP> {
                   SizedBox(
                       height: 50,
                       width: 150,
-                      child: CustomRoundButton(
-                          title: "resent otp", onPress: () {})),
+                      child: CustomButton(
+                          title: "resent otp",
+                          onPress: () {
+                            Map data = {
+                              "email": widget.userEmail,
+                            };
+                            authViewModel1.resendOtp(data, context);
+                          })),
                   SizedBox(
                     height: 50,
                     width: 150,
-                    child: CustomRoundButton(
+                    child: CustomButton(
+                      loading: authViewModel1.loading,
                       title: "Verify",
                       onPress: () {
                         debugPrint(otpController.text);
@@ -75,7 +80,7 @@ class _OTPState extends State<OTP> {
                             "email": widget.userEmail,
                             "otp": otpController.text.toString(),
                           };
-                          authViewModel1.verifyOtp(data, context);
+                          authViewModel1.verifyOtp1(data, context);
 
                           // Navigator.pushNamed(context, RoutesName.login);
                         }

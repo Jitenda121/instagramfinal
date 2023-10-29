@@ -1,16 +1,15 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/respository/shared_preference.dart';
 import 'package:flutter_application_1/utils/routes/routes_name.dart';
 import 'package:flutter_application_1/view/forget_password.dart';
+import 'package:flutter_application_1/view/otp_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../respository/auth_respository.dart';
 import '../../utils/utils.dart';
 
 class AuthViewModel with ChangeNotifier {
-  //final String apiUrl = "https://example.com/api/signup";
-  //final String username = "socailMedia";
-  //final String password = "social@123";
   final _myRepo = AuthRepository();
   bool _loading = false;
   bool get loading => _loading;
@@ -28,11 +27,13 @@ class AuthViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> loginApi(dynamic data, BuildContext context) async {
+  Future<void> loginApi(dynamic data, context) async {
     setLoading(true);
     _myRepo.loginapi(data).then((value) {
       setLoading(false);
-      Utils.flashBarErrorMessage('login successful', context);
+      Utils.toastMessage(
+        'login successful',
+      );
       Navigator.pushNamedAndRemoveUntil(
           context, RoutesName.homepage, (routes) => false);
       if (kDebugMode) {
@@ -40,22 +41,30 @@ class AuthViewModel with ChangeNotifier {
       }
     }).onError((error, stackTrace) {
       setLoading(false);
-      Utils.flashBarErrorMessage(error.toString(), context);
+      Utils.toastMessage(
+        error.toString(),
+      );
       if (kDebugMode) {
-        Utils.flashBarErrorMessage(error.toString(), context);
+        Utils.toastMessage(
+          error.toString(),
+        );
         print(error.toString());
       }
     });
   }
 
-  Future<void> signupApi(dynamic data, BuildContext context) async {
+  Future<void> signupApi(
+      dynamic data, String email, BuildContext context) async {
     setsignupLoading(true);
     //data = {"username" : "manjeet", "password":"Manj@111111" ,"email": "manjeetsachan1234@gmail.com"};
     _myRepo.signupApi(data).then((value) {
       setsignupLoading(false);
-      Utils.flashBarErrorMessage('signup successful', context);
+      Utils.toastMessage(
+        'signup successful',
+      );
       // Navigator.pushNamed(context, RoutesName.otp,arguments: emailController.text,);
-      //Navigator.pushNamed(context, RoutesName.otp(data));
+      Navigator.push(context,
+          MaterialPageRoute(builder: ((context) => OTP(userEmail: email))));
       if (kDebugMode) {
         print(value.toString());
       }
@@ -79,7 +88,29 @@ class AuthViewModel with ChangeNotifier {
       if (isOtpValid) {
         Utils.flashBarErrorMessage('OTP verified successfully', context);
 
-        Navigator.pushNamed(context, RoutesName.reset, );
+        Navigator.pushNamed(context, RoutesName.reset);
+      } else {
+        Utils.flashBarErrorMessage('Invalid OTP. Please try again.', context);
+      }
+    }).onError((error, stackTrace) {
+      setLoading(false);
+      Utils.flashBarErrorMessage('Error verifying OTP: $error', context);
+      if (kDebugMode) {
+        print(error.toString());
+      }
+    });
+  }
+
+  Future<void> verifyOtp1(dynamic data, BuildContext context) async {
+    setLoading(true);
+    // Assume your API endpoint for OTP verification is named 'verifyOtp'
+    // Modify the API call according to your backend setup
+    _myRepo.verifyOtpApi(data).then((bool isOtpValid) {
+      setLoading(false);
+      if (isOtpValid) {
+        Utils.flashBarErrorMessage('OTP verified successfully', context);
+
+        Navigator.pushNamed(context, RoutesName.login);
       } else {
         Utils.flashBarErrorMessage('Invalid OTP. Please try again.', context);
       }
@@ -98,7 +129,7 @@ class AuthViewModel with ChangeNotifier {
     // Call your API to resend the OTP (replace 'resendOtpApi' with your actual API call)
     _myRepo.forgetPasswordApi(data).then((_) {
       setLoading(false);
-      Utils.flashBarErrorMessage('OTP resent successfully', context);
+      Utils.flashBarErrorMessage('OTP sent successfully', context);
     }).onError((error, stackTrace) {
       setLoading(false);
       Utils.flashBarErrorMessage('Error resending OTP: $error', context);
@@ -114,7 +145,7 @@ class AuthViewModel with ChangeNotifier {
     // Call your API to resend the OTP (replace 'resendOtpApi' with your actual API call)
     _myRepo.resendOtpApi(data).then((_) {
       setLoading(false);
-      Utils.flashBarErrorMessage('OTP resent successfully', context);
+      Utils.flashBarErrorMessage('OTP resend successfully', context);
     }).onError((error, stackTrace) {
       setLoading(false);
       Utils.flashBarErrorMessage('Error resending OTP: $error', context);
@@ -123,27 +154,193 @@ class AuthViewModel with ChangeNotifier {
       }
     });
   }
-  Future<void> resetPassword(String newPassword, BuildContext context) async {
+
+  Future<void> resendOtp1(dynamic data, BuildContext context) async {
     setLoading(true);
 
-    try {
-      // Call your API to reset the password and get a token (replace 'resetPasswordApi' with your actual API call)
-      String token = await _myRepo.resetPasswordApi(newPassword);
-
-      // Store the token in SharedPreferences
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setString('token', token);
-
+    // Call your API to resend the OTP (replace 'resendOtpApi' with your actual API call)
+    _myRepo.resendOtpApi(data).then((_) {
       setLoading(false);
-      
-      // Navigate to the home page or any other destination after resetting the password
-      Navigator.pushReplacementNamed(context, RoutesName.homepage);
-    } catch (error) {
+      Utils.flashBarErrorMessage('OTP resend successfully', context);
+    }).onError((error, stackTrace) {
       setLoading(false);
-      Utils.flashBarErrorMessage('Error resetting password: $error', context);
+      Utils.flashBarErrorMessage('Error resending OTP: $error', context);
       if (kDebugMode) {
         print(error.toString());
       }
+    });
+  }
+
+  Future<void> resetPassword(dynamic data, BuildContext context) async {
+    setLoading(true);
+    debugPrint("fdghjkljgfgc");
+    debugPrint(data.toString());
+
+    try {
+      _myRepo.resetPasswordApi(data).then((_) {
+        setLoading(false);
+        Utils.flashBarErrorMessage('Password reset successful', context);
+        Navigator.pushNamedAndRemoveUntil(
+            context, RoutesName.login, (routes) => false);
+      }).onError((error, stackTrace) {
+        setLoading(false);
+        Utils.flashBarErrorMessage('Error resetting password: $error', context);
+        if (kDebugMode) {
+          print(error.toString());
+        }
+      });
+    } catch (error) {
+      setLoading(false);
+      Utils.flashBarErrorMessage('Error obtaining authToken: $error', context);
+      if (kDebugMode) {
+        print(error.toString());
+      }
+    }
+  }
+
+  Future<void> postLike(String postId, BuildContext context) async {
+    setLoading(true);
+    debugPrint("@#@@@@@@@@@@@@@@@?***********");
+
+    debugPrint(postId.toString());
+
+    try {
+      await _myRepo.toggleLikeApi(postId);
+
+      setLoading(false);
+
+      notifyListeners();
+    } catch (error) {
+      setLoading(false);
+      Utils.toastMessage('Error liking post: $error');
+      if (kDebugMode) {
+        print(error.toString());
+      }
+    }
+  }
+
+  Future<void> logout(BuildContext context) async {
+    // Retrieve the authentication token from shared preferences.
+    String? authToken = await SharedPreferencesManager.getLoginToken();
+
+    // Set loading state to indicate the logout process has started.
+    setLoading(true);
+
+    try {
+      debugPrint(
+          "------------------------------authToken1--------------------------");
+      String? s2 = await SharedPreferencesManager.getLoginToken();
+      debugPrint(s2);
+      // Delete the token from shared preferences first.
+      SharedPreferencesManager.deleteLoginToken();
+
+      // Now, perform the logout action (if any).
+      await _myRepo.logoutApi(authToken);
+
+      // At this point, 'authToken' should be deleted, and any debugPrint will show it as null.
+      debugPrint(
+          "------------------------------authToken2--------------------------");
+      String? s1 = await SharedPreferencesManager.getLoginToken();
+      debugPrint(s1);
+
+      // Navigate to the login screen after successful logout.
+      Navigator.pushNamedAndRemoveUntil(
+          context, RoutesName.login, (routes) => false);
+
+      // Set loading state to indicate the logout process is complete.
+      setLoading(false);
+    } catch (error) {
+      // If there's an error during logout, handle it and display an error message.
+      setLoading(false);
+      Utils.flashBarErrorMessage('Error during logout: $error', context);
+      if (kDebugMode) {
+        print(error.toString());
+      }
+    }
+  }
+
+  Future<void> createPost(dynamic data, BuildContext context) async {
+    setLoading(true);
+
+    try {
+      // Call your API endpoint to create a new post (replace 'createPostApi' with your actual API endpoint)
+      await _myRepo.createPostApi(data);
+      Utils.toastMessage("post successful");
+
+      // Perform any necessary actions after the post is successfully created
+      // For example, navigate to the home page
+      // Navigator.pushNamedAndRemoveUntil(
+      //     context, RoutesName.homepage, (routes) => false);
+
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      Utils.flashBarErrorMessage('Error creating post: $error', context);
+      if (kDebugMode) {
+        print(error.toString());
+      }
+    }
+  }
+
+  // Future<void> deletePost(dynamic data, BuildContext context) async {
+  //   setLoading(true);
+
+  //   try {
+  //     // Call your API endpoint to delete the post using postId
+  //     String postId = data['postId'];
+  //     await _myRepo.deleteUserPostApi(postId);
+
+  //     Utils.toastMessage("Post deleted successfully");
+
+  //     // Perform any necessary actions after the post is successfully deleted
+  //     // For example, refresh the feed or navigate to a different screen
+  //     // Navigator.pushNamedAndRemoveUntil(
+  //     //     context, RoutesName.homepage, (routes) => false);
+
+  //     setLoading(false);
+  //   } catch (error) {
+  //     setLoading(false);
+  //     debugPrint("jitendra");
+  //     debugPrint(error.toString());
+  //     //Utils.flashBarErrorMessage('Error deleting post: $error', context);
+  //     if (kDebugMode) {
+  //       print(error.toString());
+  //     }
+  //   }
+  // }
+  Future<void> deletePost(dynamic data, BuildContext context) async {
+    setLoading(true);
+
+    try {
+      // Call your API endpoint to delete the post using postId
+      String postId = data['postId'];
+      debugPrint("@@@@@@@@@@@@@@@@@@@@@@@");
+      debugPrint(postId.toString());
+
+      // Check if postId is not null or empty before making the API call
+      if (postId.isNotEmpty) {
+        // Call the API with the postId parameter
+       // debugPrint(postId.toString());
+        // debugprint
+        await _myRepo.deleteUserPostApi(postId);
+
+        Utils.toastMessage("Post deleted successfully");
+
+        // Perform any necessary actions after the post is successfully deleted
+        // For example, refresh the feed or navigate to a different screen
+        // Navigator.pushNamedAndRemoveUntil(
+        //     context, RoutesName.homepage, (routes) => false);
+      } else {
+        // Handle the case where postId is null or empty
+        Utils.flashBarErrorMessage('postId is required', context);
+      }
+
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      debugPrint("Error during delete user post API call: $error");
+
+      // Handle other errors, if necessary
     }
   }
 }

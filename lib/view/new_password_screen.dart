@@ -8,11 +8,11 @@ import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
- // final String token;
+  // final String token;
   //String token = '';
   //String token = '';
   ChangePasswordScreen({
-    super.key, 
+    super.key,
   });
 
   @override
@@ -29,7 +29,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final authViewModel = Provider.of<AuthViewModel>(context);
+    final authViewModel = Provider.of<AuthViewModel>(context, listen: false);
+    // final authViewModel7 = Provider.of<AuthViewModel>(context);
     return Scaffold(
       body: Form(
         key: _formKey,
@@ -49,10 +50,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   //debug
                   validator: (value) {
                     confirmPass = value;
-                    //debugPrint(password.text);
-                    //debugPrint("fhbf");
-                    //debugPrint(value);
-                    //debugPrint("122");
+                
                     if (value == null || value.isEmpty) {
                       return "Password cannot be empty";
                     }
@@ -66,10 +64,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 hintText: "Confirm Password",
                 controller: confirmPassword,
                 validator: (value) {
-                  // debugPrint(value);
-                  //debugPrint(password.text);
-                  //debugPrint(confirmPassword.text);
-                  //debugPrint(confirmPass);
+                  
 
                   if (value == null || value.isEmpty) {
                     return "Confirm Password cannot be empty";
@@ -84,18 +79,29 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 height: 20,
               ),
               CustomRoundButton(
+                loading: authViewModel.loading,
                 title: "Reset Password ",
                 // onPress: () {
                 //   Navigator.push(context,
                 //       MaterialPageRoute(builder: (builder) => LoginScreen()));
                 // }
-                onPress: () {
+                onPress: () async {
                   if (_formKey.currentState!.validate()) {
                     // Passwords are valid, proceed with reset logic
 
                     // Navigator.pushNamed(context, RoutesName.loginscreen);
-                    String newpassword = password.text.toString().trim();
-                    authViewModel.resetPassword(newpassword, context);
+                    // final authViewModel =
+                    //     Provider.of<AuthViewModel>(context, listen: false);
+                    //String authToken = await authViewModel.getToken();
+
+                    Map data = {
+                      "newPassword": password.text.toString().trim(),
+                      //"authToken": authToken,
+                    };
+                    debugPrint("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!@#^");
+
+                    authViewModel.resetPassword(data, context);
+                    debugPrint(data.toString());
                   }
                 },
               )

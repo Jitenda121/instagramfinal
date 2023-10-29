@@ -2,19 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_application_1/res/component/app_images.dart';
 import 'package:flutter_application_1/res/component/round_button.dart';
-import 'package:flutter_application_1/utils/routes/routes_name.dart';
+//import 'package:flutter_application_1/utils/routes/routes_name.dart';
 import 'package:flutter_application_1/utils/utils.dart';
 import 'package:flutter_application_1/view_model/viewmodel/auth_view_model.dart';
 //import 'package:flutter_application_1/view/new_password_screen.dart';
 //import 'package:flutter_application_1/view/otp_screen.dart';
 import 'package:flutter_application_1/view_model/viewmodel/custom_text.dart';
+import 'package:flutter_application_1/view_model/viewmodel/custombutton.dart';
 import 'package:lottie/lottie.dart';
 import 'package:pinput/pinput.dart';
 import 'package:provider/provider.dart';
 
 class ForgetPassword extends StatefulWidget {
- // final token;
-  const ForgetPassword({super.key, });
+  // final token;
+  const ForgetPassword({
+    super.key,
+  });
 
   @override
   State<ForgetPassword> createState() => _ForgetPasswordState();
@@ -67,7 +70,8 @@ class _ForgetPasswordState extends State<ForgetPassword> {
               ),
               // CustomRoundButton(
               //     title: "Resend OTP", onPress: () {}),
-              CustomRoundButton(
+              CustomButton(
+               // loading: authViewModel2.loading,
                 title: "Send OTP",
                 onPress: () {
                   String email = emailController.text.toString().trim();
@@ -126,7 +130,8 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                                 SizedBox(
                                   width: 100,
                                   height: 50,
-                                  child: CustomRoundButton(
+                                  child: CustomButton(
+                                   // loading: authViewModel4.loading,
                                       title: "resend ",
                                       onPress: () {
                                         Map data = {
@@ -134,33 +139,19 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                                               emailController.text.toString(),
                                         };
 
-                                        authViewModel4.resendOtp(data, context);
+                                        authViewModel4.resendOtp1(
+                                            data, context);
                                       }),
                                 ),
                                 SizedBox(
                                   width: 100,
                                   height: 50,
-                                  child: CustomRoundButton(
+                                  child: CustomButton(
+                                   // loading: authViewModel3.loading,
                                       title: "Verify",
                                       onPress: () {
                                         if (otpController.text.isNotEmpty) {
-                                          //                 if (_formKey.currentState?.validate() ?? false) {
-                                          //   // Form is valid, proceed with signup logic
-                                          //   // Implement your signup logic here
-                                          //  // Navigator.pushNamed(context, RoutesName.);
-                                          // }
-                                          // Map data = {
-                                          //   "email": emailController.text
-                                          //       .toString()
-                                          //       .trim(),
-                                          //   "otp":
-                                          //       otpController.text.toString(),
-                                          // };
-                                          // authViewModel2.verifyOtp(
-                                          //     data, context);
-
-                                          // Navigator.pushNamed(
-                                          //     context, RoutesName.reset);
+                                          //                 
                                           Map data = {
                                             "email":
                                                 emailController.text.toString(),
@@ -169,8 +160,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                                           };
                                           authViewModel3.verifyOtp(
                                               data, context);
-                                            // print(data[])
-                                              //debugPrint(["data"]["resetpassword"])
+                                          
                                         } else {
                                           // Show error message indicating OTP is required
                                           Utils.toastMessage("OTP is required");
@@ -184,9 +174,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                         );
                       },
                     );
-                    // AuthViewModel
-                    // Map data = {"email": emailController.toString()};
-                    // authViewModel2.forgetPasswordApi(data as String, context);
+               
                   }
                 },
               ),
