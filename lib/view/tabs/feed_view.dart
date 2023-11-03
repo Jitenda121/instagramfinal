@@ -34,6 +34,10 @@ class _FeedViewState extends State<FeedView> {
             case Status.Error:
               return Text(value.userProfile.message.toString());
             case Status.Success:
+              // List<String> postImages = value
+              //     .userProfile.data!.data.userPofile[0].userPosts
+              //     .map((post) => post.url)
+              //     .toList();
               List<String> postImages = value
                   .userProfile.data!.data.userPofile[0].userPosts
                   .map((post) => post.url)
@@ -64,6 +68,32 @@ class _FeedViewState extends State<FeedView> {
                       child: Image.network(
                         postImages[index],
                         fit: BoxFit.cover,
+                        loadingBuilder: (BuildContext context, Widget child,
+                            ImageChunkEvent? loadingProgress) {
+                          if (loadingProgress == null) {
+                            return child;
+                          } else {
+                            return Center(
+                              child: CircularProgressIndicator(
+                                value: loadingProgress.expectedTotalBytes !=
+                                        null
+                                    ? loadingProgress.cumulativeBytesLoaded /
+                                        (loadingProgress.expectedTotalBytes ??
+                                            1)
+                                    : null,
+                                valueColor:
+                                    const AlwaysStoppedAnimation<Color>(Colors.blue),
+                              ),
+                            );
+                          }
+                        },
+                        errorBuilder: (BuildContext context, Object error,
+                            StackTrace? stackTrace) {
+                          // Handle errors here
+                          return const Center(
+                            child: Text('Error loading image'),
+                          );
+                        },
                       ),
                     ),
                   ),
@@ -83,30 +113,25 @@ class _FeedViewState extends State<FeedView> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Delete Image'),
-          content: Text('Are you sure you want to delete this image?'),
+          title: const Text('Delete Image'),
+          content: const Text('Are you sure you want to delete this image?'),
           actions: <Widget>[
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop(); // Close the dialog
               },
-              child: Text('Cancel'),
+              child: const Text('Cancel'),
             ),
             TextButton(
               onPressed: () {
                 // Access authViewModel here and perform necessary actions
                 // Replace doSomething() with the actual function you want to call
-                Map data = {
-                  // String postId = imageId.toString();
+                Map data = {"postId": imageId};
 
-                  "postId": imageId
-                };
-                // String postId = imageId;
-                //String postId = imageId;
                 authViewModel.deletePost(data, context);
                 Navigator.of(context).pop(); // Close the dialog
               },
-              child: Text('Delete', style: TextStyle(color: Colors.red)),
+              child: const Text('Delete', style: TextStyle(color: Colors.red)),
             ),
           ],
         );
@@ -130,6 +155,7 @@ class _FeedViewState extends State<FeedView> {
                   TextButton(
                     onPressed: () {
                       debugPrint(postId);
+                      Navigator.pop(context);
                       confirmDeleteImageDialogBox(
                           context, postId, authViewModel);
                     },

@@ -1,7 +1,12 @@
+//import 'dart:js';
+
+//import 'dart:js';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/respository/shared_preference.dart';
 import 'package:flutter_application_1/utils/routes/routes_name.dart';
+import 'package:flutter_application_1/view/bottom_navigationbartab/home.dart';
 import 'package:flutter_application_1/view/forget_password.dart';
 import 'package:flutter_application_1/view/otp_screen.dart';
 import 'package:provider/provider.dart';
@@ -259,55 +264,33 @@ class AuthViewModel with ChangeNotifier {
     }
   }
 
-  Future<void> createPost(dynamic data, BuildContext context) async {
+  Future<void> createPost(dynamic data, context) async {
     setLoading(true);
 
     try {
       // Call your API endpoint to create a new post (replace 'createPostApi' with your actual API endpoint)
       await _myRepo.createPostApi(data);
       Utils.toastMessage("post successful");
+      Navigator.pushNamedAndRemoveUntil(
+          context, RoutesName.homepage, (routes) => false);
 
       // Perform any necessary actions after the post is successfully created
-      // For example, navigate to the home page
+      //For example, navigate to the home page
       // Navigator.pushNamedAndRemoveUntil(
       //     context, RoutesName.homepage, (routes) => false);
+      //Navigator.pushNamed(BuildContext,r)
+      // Navigator.pushNamed( BuildContext context,RoutesName.homepage)
 
       setLoading(false);
     } catch (error) {
       setLoading(false);
-      Utils.flashBarErrorMessage('Error creating post: $error', context);
+      Utils.toastMessage('Error creating post: $error');
       if (kDebugMode) {
         print(error.toString());
       }
     }
   }
 
-  // Future<void> deletePost(dynamic data, BuildContext context) async {
-  //   setLoading(true);
-
-  //   try {
-  //     // Call your API endpoint to delete the post using postId
-  //     String postId = data['postId'];
-  //     await _myRepo.deleteUserPostApi(postId);
-
-  //     Utils.toastMessage("Post deleted successfully");
-
-  //     // Perform any necessary actions after the post is successfully deleted
-  //     // For example, refresh the feed or navigate to a different screen
-  //     // Navigator.pushNamedAndRemoveUntil(
-  //     //     context, RoutesName.homepage, (routes) => false);
-
-  //     setLoading(false);
-  //   } catch (error) {
-  //     setLoading(false);
-  //     debugPrint("jitendra");
-  //     debugPrint(error.toString());
-  //     //Utils.flashBarErrorMessage('Error deleting post: $error', context);
-  //     if (kDebugMode) {
-  //       print(error.toString());
-  //     }
-  //   }
-  // }
   Future<void> deletePost(dynamic data, BuildContext context) async {
     setLoading(true);
 
@@ -320,7 +303,7 @@ class AuthViewModel with ChangeNotifier {
       // Check if postId is not null or empty before making the API call
       if (postId.isNotEmpty) {
         // Call the API with the postId parameter
-       // debugPrint(postId.toString());
+        // debugPrint(postId.toString());
         // debugprint
         await _myRepo.deleteUserPostApi(postId);
 
@@ -339,8 +322,39 @@ class AuthViewModel with ChangeNotifier {
     } catch (error) {
       setLoading(false);
       debugPrint("Error during delete user post API call: $error");
-
-      // Handle other errors, if necessary
     }
   }
+  // Future<void> ReportPost(dynamic data, BuildContext context) async {
+  //   setLoading(true);
+
+  //   try {
+  //     // Call your API endpoint to delete the post using postId
+  //     String postId = data['postId'];
+  //     debugPrint("@@@@@@@@@@@@@@@@@@@@@@@");
+  //     debugPrint(postId.toString());
+
+  //     // Check if postId is not null or empty before making the API call
+  //     if (postId.isNotEmpty) {
+  //       // Call the API with the postId parameter
+  //      // debugPrint(postId.toString());
+  //       // debugprint
+  //       await _myRepo.ReportPostApi(postId);
+
+  //       Utils.toastMessage("Post deleted successfully");
+
+  //       // Perform any necessary actions after the post is successfully deleted
+  //       // For example, refresh the feed or navigate to a different screen
+  //       // Navigator.pushNamedAndRemoveUntil(
+  //       //     context, RoutesName.homepage, (routes) => false);
+  //     } else {
+  //       // Handle the case where postId is null or empty
+  //       Utils.flashBarErrorMessage('postId is required', context);
+  //     }
+
+  //     setLoading(false);
+  //   } catch (error) {
+  //     setLoading(false);
+  //     debugPrint("Error during delete user post API call: $error");
+  //   }
+  // }
 }

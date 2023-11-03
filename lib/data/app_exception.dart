@@ -1,32 +1,29 @@
 class AppException implements Exception {
   final _message;
-  final _prefix;
-  AppException([this._message, this._prefix]);
+
+  AppException([this._message]);
 
   String toString() {
-    return '$_prefix$_message';
+    return '$_message';
   }
 }
 
 class FetchDataException extends AppException {
-  FetchDataException([String? message])
-      : super(message, 'Error During Communication');
+  FetchDataException([String? message]) : super(message);
 }
 
 class BadRequestException extends AppException {
-  BadRequestException([String? message]) : super(message, 'Invalid  request');
+  BadRequestException([String? message]) : super(message);
 }
 
 class UnauthorisedException extends AppException {
-  UnauthorisedException([String? message])
-      : super(message, 'Unauthorised request');
+  UnauthorisedException([String? message]) : super(message);
 }
+
 class InvalidInputException extends AppException {
-  InvalidInputException([String? message])
-      : super(message, 'Unauthorised request');
+  InvalidInputException([String? message]) : super(message);
 }
 
 class NotFoundException extends AppException {
-  NotFoundException([String? message])
-      : super(message, 'NotFoundException request');
+  NotFoundException([String? message]) : super(message);
 }

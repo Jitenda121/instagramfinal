@@ -25,7 +25,8 @@ class _TutorialScreen1State extends State<TutorialScreen1> {
         onDone: () {
           //Navigator.pushNamed(context, RoutesName.loginscreen);
           Navigator.pushNamedAndRemoveUntil(
-              context, RoutesName.loginscreen, (route) => false);
+              context, RoutesName.loginscreen, 
+              (route) => false);
           // Navigator.pushAndRemoveUntil(
           //     context, RoutesName.loginscreen, (route) => false);
         },

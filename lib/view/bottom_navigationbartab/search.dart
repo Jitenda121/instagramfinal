@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/utils/explore_grid.dart';
+import 'package:flutter_application_1/view_model/viewmodel/User_feeds_model.dart';
 import 'package:flutter_application_1/view_model/viewmodel/custom_text.dart';
 
 class Search_Page extends StatefulWidget {
@@ -11,6 +12,13 @@ class Search_Page extends StatefulWidget {
 
 class _Search_PageState extends State<Search_Page> {
   TextEditingController text = TextEditingController();
+  //UserFeedsViewModel userFeedsViewModel = UserFeedsViewModel();
+  // @override
+  //  void initState() {
+  //   debugPrint("in homepage");
+  //   userFeedsViewModel.fetchUserfeeds();
+  //   super.initState();
+  // }
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -9,7 +9,10 @@ import 'package:flutter_application_1/view/new_password_screen.dart';
 import 'package:flutter_application_1/view/otp_screen.dart';
 import 'package:flutter_application_1/view/sign_up.dart';
 import 'package:flutter_application_1/view/splash_screen.dart';
+import 'package:flutter_application_1/view_model/viewmodel/Likelist_view_model.dart';
 import 'package:flutter_application_1/view_model/viewmodel/auth_view_model.dart';
+import 'package:flutter_application_1/view_model/viewmodel/like_view_model.dart';
+import 'package:flutter_application_1/view_model/viewmodel/patch_view_model.dart';
 //import 'package:flutter_application_1/view_model/viewmodel/user_view_model.dart';
 import 'package:provider/provider.dart';
 
@@ -31,9 +34,12 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (context) => LikelistViewModel()),
+        ChangeNotifierProvider(create: (context) => LikePostViewModel()),
         ChangeNotifierProvider(create: (context) => HomeViewModel()),
         ChangeNotifierProvider(create: (context) => ImageProviderModel()),
         ChangeNotifierProvider(create: (context) => AuthViewModel()),
+        ChangeNotifierProvider(create: (context) => EditViewModel()),
         //ChangeNotifierProvider(create: (context) => UserViewModel()),
         ChangeNotifierProvider(
           create: (_) => AuthProvider(),

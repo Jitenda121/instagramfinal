@@ -5,6 +5,7 @@ import 'package:flutter_application_1/view/bottom_navigationbartab/createpost.da
 import 'package:flutter_application_1/view/bottom_navigationbartab/gallary.dart';
 import 'package:flutter_application_1/view/bottom_navigationbartab/home.dart';
 import 'package:flutter_application_1/view/bottom_navigationbartab/search.dart';
+import 'package:flutter_application_1/view_model/viewmodel/User_feeds_model.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
@@ -15,16 +16,16 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<bool> isFavoriteList = List.generate(8, (index) => false);
+  //List<bool> isFavoriteList = List.generate(value., (index) => false);
+  UserFeedsViewModel userFeedsViewModel = UserFeedsViewModel();
 
   final List<Widget> _pages = [
     const Home_page(),
     const Search_Page(),
     const CreatePost(),
-    const Gallary(),
+    //const Gallary(),
     const OwnerProfile(),
   ];
-
   @override
   Widget build(BuildContext context) {
     debugPrint("---------------------%--------------------");
@@ -41,7 +42,8 @@ class _HomePageState extends State<HomePage> {
 
 class BottomNavigationBarWidget extends StatefulWidget {
   @override
-  State<BottomNavigationBarWidget> createState() => _BottomNavigationBarWidgetState();
+  State<BottomNavigationBarWidget> createState() =>
+      _BottomNavigationBarWidgetState();
 }
 
 class _BottomNavigationBarWidgetState extends State<BottomNavigationBarWidget> {
@@ -66,10 +68,10 @@ class _BottomNavigationBarWidgetState extends State<BottomNavigationBarWidget> {
           icon: Icon(Icons.add),
           label: "CreatePost",
         ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.image),
-          label: "Gallery",
-        ),
+        // BottomNavigationBarItem(
+        //   icon: Icon(Icons.image),
+        //   label: "Gallery",
+        // ),
         BottomNavigationBarItem(
           icon: Icon(Icons.person),
           label: "Profile",

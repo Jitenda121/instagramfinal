@@ -4,6 +4,7 @@ import 'package:flutter_application_1/utils/routes/routes_name.dart';
 //import 'package:flutter_application_1/view/bottom_navigationbartab.dart/account.dart';
 //import 'package:flutter_application_1/view/bottom_navigationbartab.dart/search.dart';
 import 'package:flutter_application_1/view/bottom_navigationbartab/account.dart';
+import 'package:flutter_application_1/view/bottom_navigationbartab/home.dart';
 import 'package:flutter_application_1/view/bottom_navigationbartab/search.dart';
 import 'package:flutter_application_1/view/complete_profile.dart';
 import 'package:flutter_application_1/view/edit_profile.dart';
@@ -19,8 +20,6 @@ import 'package:flutter_application_1/view/splash_sevices.dart';
 //import 'package:flutter_application_1/view/tab1home/account.dart';
 //import 'package:flutter_application_1/view/tab1home/search.dart';
 import 'package:flutter_application_1/view/tutorial1.dart';
-import 'package:flutter_application_1/view/user_followers.dart';
-import 'package:flutter_application_1/view/user_following.dart';
 
 class Routes {
   // ignore: non_constant_identifier_names
@@ -45,6 +44,9 @@ class Routes {
       case RoutesName.homepage:
         return MaterialPageRoute(
             builder: (BuildContext context) => const HomePage());
+      case RoutesName.homepage1:
+        return MaterialPageRoute(
+            builder: (BuildContext context) => const Home_page());
 
       case RoutesName.otp:
         if (settings.arguments != null) {
@@ -61,9 +63,9 @@ class Routes {
                   ));
         }
 
-      case RoutesName.completeprofile:
-        return MaterialPageRoute(
-            builder: (BuildContext context) => const CompleteProfile());
+      // case RoutesName.completeprofile:
+      //   return MaterialPageRoute(
+      //       builder: (BuildContext context) => const CompleteProfile());
 
       case RoutesName.forgetpassword:
         return MaterialPageRoute(
@@ -88,7 +90,13 @@ class Routes {
 
       case RoutesName.editprofile:
         return MaterialPageRoute(
-            builder: (BuildContext context) => const EditProfile());
+            builder: (BuildContext context) => EditProfile(
+                  useData: settings.arguments as Map,
+                ));
+
+      case RoutesName.userprofile:
+        return MaterialPageRoute(
+            builder: (BuildContext context) => const OwnerProfile());
 
       case RoutesName.owner:
         return MaterialPageRoute(

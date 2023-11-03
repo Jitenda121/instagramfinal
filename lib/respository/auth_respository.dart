@@ -56,17 +56,33 @@ class AuthRepository {
     }
   }
 
+  // Future<bool> verifyOtpApi(dynamic data) async {
+  //   try {
+  //     // Replace 'AppUrl.verifyOtpApi' with your actual OTP verification API endpoint
+  //     dynamic response = await _apiServices.getPostApiResponse(
+  //         AppUrl.verifyOtpApi, data,
+  //         header: {"Content-Type": "application/json; charset=UTF-8"});
+
+  //     // Assuming your API response contains a key 'isValid' indicating whether the OTP is valid or not
+  //     bool isValid = response['isValid'] ?? true;
+
+  //     return isValid;
+  //   } catch (e) {
+  //     rethrow;
+  //   }
+  // }
   Future<bool> verifyOtpApi(dynamic data) async {
     try {
       // Replace 'AppUrl.verifyOtpApi' with your actual OTP verification API endpoint
       dynamic response = await _apiServices.getPostApiResponse(
           AppUrl.verifyOtpApi, data,
           header: {"Content-Type": "application/json; charset=UTF-8"});
+      debugPrint(response.toString());
+      if (response['statusCode'] == 200) {
+        return true;
+      }
 
-      // Assuming your API response contains a key 'isValid' indicating whether the OTP is valid or not
-      bool isValid = response['isValid'] ?? true;
-
-      return isValid;
+      return false;
     } catch (e) {
       rethrow;
     }
@@ -108,7 +124,7 @@ class AuthRepository {
 
   Future<void> resendOtpApi(dynamic data) async {
     // Replace 'AppUrl.resendOtpApi' with your actual OTP resend API endpoint
-    await _apiServices.getPostApiResponse(AppUrl.forgetpassword, data,
+    await _apiServices.getPostApiResponse(AppUrl.resendOtpApi, data,
         header: {"Content-Type": "application/json; charset=UTF-8"});
   }
 
@@ -207,30 +223,31 @@ class AuthRepository {
           "Content-Type": "application/json; charset=UTF-8",
           "Authorization": "$authToken",
         },
-        // Response(body, statusCode)
-        // debugPrint(Response(body, statusCode))
       );
-      //   Response response = await _apiServices.getDeleteApiResponse(
-      //     '${AppUrl.deleteUserPost}?postId=$postId', // Adjust the endpoint URL with postId
-      //     header: {
-      //       "Content-Type": "application/json; charset=UTF-8",
-      //       "Authorization": "$authToken",
-      //     },
-      //   );
-      //   debugPrint('Response Status Code: ${response.statusCode}');
-      // debugPrint('Response Body: ${response.body}');
+    } catch (error) {
+      // Handle error if needed
+      debugPrint(error.toString());
+      debugPrint("Error during delete user post API call: $error");
+      rethrow;
+    }
+  }
 
-      //   if (response.statusCode == 200) {
-      //     // Successful deletion
-      //     Utils.toastMessage("Post deleted successfully!!!!!!!!!!!!");
-      //   } else if (response.statusCode == 400) {
-      //     // Bad Request error
-      //     // Handle the error response here
-      //     var errorMessage = json.decode(response.body)['error'];
-      //     Utils.toastMessage(errorMessage);
-      //   } else {
-      //     // Handle other status codes as needed
-      //   }
+  Future<void> ReportPostApi(String postId) async {
+    String? authToken = await SharedPreferencesManager.getLoginToken();
+    debugPrint(authToken.toString());
+    debugPrint("dfhgjklfhgjkhjghgjkhgcvjhvgvbb");
+    debugPrint(postId.toString());
+    debugPrint("dxfgchjgk");
+
+    try {
+      // Send a DELETE request to the delete user post API endpoint
+      await _apiServices.getDeleteApiResponse(
+        '${AppUrl.deleteUserPost}?postId=$postId', // Adjust the endpoint URL with postId
+        header: {
+          "Content-Type": "application/json; charset=UTF-8",
+          "Authorization": "$authToken",
+        },
+      );
     } catch (error) {
       // Handle error if needed
       debugPrint(error.toString());

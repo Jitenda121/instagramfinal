@@ -164,23 +164,4 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  // void login(String email, String password) {
-  //   // Simulating a login request. Replace this with your actual authentication logic.
-  //   // For example, you might call an API endpoint to authenticate the user.
-
-  //   // In this example, we are using hardcoded email and password for demonstration purposes.
-  //   String validEmail = "user@example.com";
-  //   String validPassword = "password123";
-
-  //   if (email == validEmail && password == validPassword) {
-  //     // Login successful
-  //     Utils.toastMessage("Login successful!");
-  //     // Navigate to the home screen or perform other actions upon successful login
-  //     // For example:
-  //     // Navigator.pushNamed(context, RoutesName.home);
-  //   } else {
-  //     // Login failed
-  //     Utils.toastMessage("Invalid email or password. Please try again.");
-  //   }
-  // }
 }

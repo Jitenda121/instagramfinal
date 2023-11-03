@@ -16,4 +16,7 @@ class RoutesName {
   static const String followers = "Followers";
   static const String following = "Following";
   static const String editprofile = "EditProfile";
+  static const String userprofile = "OwnerProfile";
+  static const String homepage1= "Home_page";
 }
+
