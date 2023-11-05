@@ -1,20 +1,15 @@
-//import 'dart:ui';
-//import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/data/response/status.dart';
 import 'package:flutter_application_1/res/component/round_button.dart';
 import 'package:flutter_application_1/utils/routes/routes_name.dart';
-//import 'package:flutter_application_1/view/edit_profile.dart';
-//import 'package:flutter_application_1/view/follower_user.dart';
 import 'package:flutter_application_1/view/following_user.dart';
+import 'package:flutter_application_1/view/otherUserFollowers.dart';
 import 'package:flutter_application_1/view/tabs/feed_view.dart';
 import 'package:flutter_application_1/view/tabs/reels_view.dart';
 import 'package:flutter_application_1/view/tabs/tagged_view.dart';
 import 'package:flutter_application_1/view_model/user_view_model.dart';
 import 'package:flutter_application_1/view_model/viewmodel/auth_view_model.dart';
-import 'package:flutter_application_1/view_model/viewmodel/customDrawer.dart';
-//import 'package:flutter_application_1/view_model/viewmodel/user_view_model.dart';
 import 'package:provider/provider.dart';
 
 class OwnerProfile extends StatefulWidget {
@@ -187,7 +182,7 @@ class _OwnerProfileState extends State<OwnerProfile> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => const Following()),
+                                    builder: (context) =>  Following()),
                               );
                             },
                             child: Column(
@@ -255,7 +250,7 @@ class _OwnerProfileState extends State<OwnerProfile> {
                                       fontSize: 15,
                                     ),
                                   ),
-                                 
+
                                   TextSpan(
                                     text:
                                         '\nBio: ${value.userProfile.data!.data.userPofile[0].profileBio}',

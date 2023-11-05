@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/data/response/status.dart';
-import 'package:flutter_application_1/view/edit_profile.dart';
-import 'package:flutter_application_1/view/follower_user.dart';
-import 'package:flutter_application_1/view/following_user.dart';
+import 'package:flutter_application_1/view/otherUserFollowers.dart';
+import 'package:flutter_application_1/view/otherUserFollowing.dart';
 import 'package:flutter_application_1/view/tabs/feed_view.dart';
 import 'package:flutter_application_1/view/tabs/reels_view.dart';
 import 'package:flutter_application_1/view/tabs/tagged_view.dart';
-import 'package:flutter_application_1/view_model/viewmodel/customDrawer.dart';
+import 'package:flutter_application_1/view_model/followviewmodel.dart';
+import 'package:flutter_application_1/view_model/unfollowviewmodel.dart';
 import 'package:flutter_application_1/view_model/viewmodel/other_view_model.dart';
 
 import 'package:provider/provider.dart';
@@ -23,6 +23,8 @@ class OtherUserProfile extends StatefulWidget {
 class _OtherUserProfileState extends State<OtherUserProfile> {
   OtherUserProfileViewModel otheruserProfileViewModel =
       OtherUserProfileViewModel();
+  FollowUserViewModel followUserViewModel = FollowUserViewModel();
+  UnFollowViewModel unFollowViewModel = UnFollowViewModel();
 
   @override
   void initState() {
@@ -72,9 +74,8 @@ class _OtherUserProfileState extends State<OtherUserProfile> {
                   color: Colors.black,
                 ),
               ),
-              backgroundColor: const Color.fromARGB(255, 112, 180, 235),
             ),
-            endDrawer:  CustomDrawer(),
+            //  endDrawer: CustomDrawer(),
             body: ChangeNotifierProvider<OtherUserProfileViewModel>(
                 create: (BuildContext context) => otheruserProfileViewModel,
                 child: Consumer<OtherUserProfileViewModel>(
@@ -129,8 +130,10 @@ class _OtherUserProfileState extends State<OtherUserProfile> {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) =>
-                                              const Following()),
+                                        builder: (context) =>
+                                            OtherUserFollowing(
+                                                userId: widget.userId),
+                                      ),
                                     );
                                   },
                                   child: Column(
@@ -138,15 +141,6 @@ class _OtherUserProfileState extends State<OtherUserProfile> {
                                       Text(value.userProfile.data!.data
                                           .userPofile[0].followingCount
                                           .toString()),
-                                      // Text(
-                                      //   userProfile?.userPofile[0].followingCount
-                                      //           .toString() ??
-                                      //       '0',
-                                      //   style: const TextStyle(
-                                      //     fontWeight: FontWeight.bold,
-                                      //     fontSize: 20,
-                                      //   ),
-                                      // ),
                                       const SizedBox(height: 5),
                                       const Text("Following"),
                                     ],
@@ -158,7 +152,9 @@ class _OtherUserProfileState extends State<OtherUserProfile> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              const FollowersScreen()),
+                                              OtherUserFollowers(
+                                                userId: widget.userId,
+                                              )),
                                     );
                                   },
                                   child: Column(
@@ -166,14 +162,6 @@ class _OtherUserProfileState extends State<OtherUserProfile> {
                                       Text(value.userProfile.data!.data
                                           .userPofile[0].followerCount
                                           .toString()),
-                                      // Text(
-                                      //   userProfile?.userPofile[0].followerCount.toString() ??
-                                      //       '0',
-                                      //   style: const TextStyle(
-                                      //     fontWeight: FontWeight.bold,
-                                      //     fontSize: 20,
-                                      //   ),
-                                      // ),
                                       const SizedBox(height: 5),
                                       const Text("Followers"),
                                     ],
@@ -194,7 +182,6 @@ class _OtherUserProfileState extends State<OtherUserProfile> {
                                     TextSpan(
                                       text: value.userProfile.data!.data
                                           .userPofile[0].username,
-                                      
                                       style: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 20,
@@ -202,7 +189,7 @@ class _OtherUserProfileState extends State<OtherUserProfile> {
                                       ),
                                     ),
                                     const TextSpan(
-                                      text: "\nFlutter Developer",
+                                      //text: "\nFlutter Developer",
                                       //    text: userProfile?.userPofile[0].email ?? 'Your Email',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
@@ -218,37 +205,88 @@ class _OtherUserProfileState extends State<OtherUserProfile> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: <Widget>[
-                              TextButton(
-                                onPressed: () {
-                                  // Navigator.push(
-                                  //   context,
-                                  //   MaterialPageRoute(
-                                  //       builder: (context) =>
-                                  //            EditProfile()),
-                                  // );
-                                },
-                                style: TextButton.styleFrom(
-                                  backgroundColor:
-                                      const Color.fromARGB(255, 172, 167, 167),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20),
+                              Container(
+                                width: double.infinity,
+                                child: ElevatedButton(
+                                  onPressed: () {},
+                                  style: ElevatedButton.styleFrom(
+                                    primary: Colors.blue,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
                                   ),
-                                ),
-                                child: const Text(
-                                  "Edit Profile",
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                                  child: value.userProfile.data!.data
+                                              .userPofile[0].isFollowing ==
+                                          true
+                                      ? InkWell(
+                                          onTap: () {
+                                            unFollowViewModel.unfollowuser(
+                                              widget.userId.toString(),
+                                              context,
+                                            );
+                                            otheruserProfileViewModel
+                                                .fetchUserProfile(
+                                                    widget.userId);
+                                            otheruserProfileViewModel
+                                                .fetchUserProfile(
+                                                    widget.userId);
+                                          },
+                                          child: Text(
+                                            "unfollow",
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        )
+                                      : InkWell(
+                                          onTap: () {
+                                            followUserViewModel.followUserApi(
+                                              widget.userId,
+                                              context,
+                                            );
+                                            otheruserProfileViewModel
+                                                .fetchUserProfile(
+                                                    widget.userId);
+                                            otheruserProfileViewModel
+                                                .fetchUserProfile(
+                                                    widget.userId);
+                                          },
+                                          child: Text(
+                                            "follow",
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ),
                                 ),
                               ),
+                              // TextButton(
+                              //   onPressed: () {
+                              //     // Navigator.push(
+                              //     //   context,
+                              //     //   MaterialPageRoute(
+                              //     //       builder: (context) =>
+                              //     //            EditProfile()),
+                              //     // );
+                              //   },
+                              //   style: TextButton.styleFrom(
+                              //     backgroundColor:
+                              //         const Color.fromARGB(255, 172, 167, 167),
+                              //     shape: RoundedRectangleBorder(
+                              //       borderRadius: BorderRadius.circular(20),
+                              //     ),
+                              //   ),
+                              //   child: const Text(
+                              //     "Edit Profile",
+                              //     style: TextStyle(
+                              //       color: Colors.black,
+                              //       fontWeight: FontWeight.bold,
+                              //     ),
+                              //   ),
+                              // ),
                             ],
-                          ),
-                          const SizedBox(height: 20),
-                          TabBar(tabs: tabs),
-                          SizedBox(
-                            height: 1000,
-                            child: TabBarView(children: tabBarViews),
                           ),
                         ],
                       );

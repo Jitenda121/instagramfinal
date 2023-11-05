@@ -47,6 +47,8 @@ class _LikelistScreenState extends State<LikelistScreen> {
                   debugPrint("Success");
                   final followers = value.listList.data;
                   return SizedBox(
+               
+                    height: MediaQuery.of(context).size.height,
                     child: followers!.data.likes.isEmpty
                         ? const Center(
                             child: Text("No Following"),
@@ -55,15 +57,9 @@ class _LikelistScreenState extends State<LikelistScreen> {
                             itemCount: followers.data.likes.length,
                             itemBuilder: (context, index) {
                               return ListTile(
-                                onTap: () {
-                                  // Navigator.push(
-                                  //     context,
-                                  //     MaterialPageRoute(
-                                  //         builder: (context) => UserProfileScreen(
-                                  //             userId: followers.data[index].userId
-                                  //                 .toString())));
-                                },
+                                onTap: () {},
                                 leading: CircleAvatar(
+                                  // radius: 50,
                                   child: ClipOval(
                                     child: Image.network(
                                       followers.data.likes[0].user.profilePic,
@@ -75,10 +71,6 @@ class _LikelistScreenState extends State<LikelistScreen> {
                                           .cover, // Ensure the image covers the circular area
                                     ),
                                   ),
-                                  // Icon(
-                                  //   Icons.person,
-                                  //   size: 30,
-                                  // ),
                                 ),
                                 title: Text(
                                     followers.data.likes[index].user.username ??
@@ -86,16 +78,6 @@ class _LikelistScreenState extends State<LikelistScreen> {
                                 subtitle: Text(
                                     followers.data.likes[index].user.email ??
                                         ""),
-                                // trailing: SizedBox(
-                                //     height: 35,
-                                //     width: 90,
-                                //     child: RoundedButton(
-                                //       // loading: unFollowUserViewModel.removeLoading,
-                                //         btnName: "Remove", btnCallBack: () {
-                                //            unFollowUserViewModel.unFollowApi(followers.data[index].userId.toString(), context);
-                                //         }
-                                //         )
-                                //         )
                               );
                             }),
                   );

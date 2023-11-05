@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/provider/auth_provider.dart';
 import 'package:flutter_application_1/provider/home_view_model.dart';
 import 'package:flutter_application_1/provider/imagedelete.dart';
+import 'package:flutter_application_1/provider/passwordVisibility.dart';
 import 'package:flutter_application_1/provider/sign_up.dart';
 import 'package:flutter_application_1/utils/routes/routes.dart';
-import 'package:flutter_application_1/view/homepage.dart';
-import 'package:flutter_application_1/view/new_password_screen.dart';
-import 'package:flutter_application_1/view/otp_screen.dart';
-import 'package:flutter_application_1/view/sign_up.dart';
+//import 'package:flutter_application_1/view/homepage.dart';
+//import 'package:flutter_application_1/view/new_password_screen.dart';
+///mport 'package:flutter_application_1/view/otp_screen.dart';
+//mport 'package:flutter_application_1/view/sign_up.dart';
 import 'package:flutter_application_1/view/splash_screen.dart';
 import 'package:flutter_application_1/view_model/viewmodel/Likelist_view_model.dart';
 import 'package:flutter_application_1/view_model/viewmodel/auth_view_model.dart';
@@ -40,6 +41,7 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (context) => ImageProviderModel()),
         ChangeNotifierProvider(create: (context) => AuthViewModel()),
         ChangeNotifierProvider(create: (context) => EditViewModel()),
+        ChangeNotifierProvider(create: (_) => PasswordVisibilityNotifier()),
         //ChangeNotifierProvider(create: (context) => UserViewModel()),
         ChangeNotifierProvider(
           create: (_) => AuthProvider(),

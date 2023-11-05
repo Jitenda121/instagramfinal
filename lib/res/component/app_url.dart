@@ -22,4 +22,17 @@ class AppUrl {
   static var commentList = '$baseUrl/api/v1/user/comments';
   static var reportpost = '$baseUrl/api/v1/user/report-post';
    static var editProfile = '$baseUrl/api/v1/user/edit-profile';
+   static var getSeachUserProfile = '$baseUrl/api/v1/user/user-search';
+   static var getPostDisLike = '$baseUrl/api/v1/user/dislike';
+   static var deleteComment = '$baseUrl/api/v1/user/comment';
+   static var editComment = '$baseUrl/api/v1/user/comment';
+   static var postNotification = '$baseUrl/api/v1/notification';
+   static var deleteNotification = '$baseUrl/api/v1/notification';
+   static var getnotificationList = '$baseUrl/api/v1/notification';
+   static var unfollowUser = '$baseUrl/api/v1/user/unfollow';
+   static var followUser = '$baseUrl/api/v1/user/follow';
+   static var editPost = '$baseUrl/api/v1/user/post';
+   static var getuserpost = '$baseUrl/api/v1/user/user-post';
+
+
 }

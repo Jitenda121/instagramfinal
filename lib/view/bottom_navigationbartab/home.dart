@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/data/response/status.dart';
-import 'package:flutter_application_1/model/likeList.dart';
 import 'package:flutter_application_1/res/colors.dart';
+import 'package:flutter_application_1/respository/shared_preference.dart';
 import 'package:flutter_application_1/view/Likelist_Screen.dart';
 import 'package:flutter_application_1/view/bottommodalsheet/bottommodalsheet.dart';
 import 'package:flutter_application_1/view/commentScreen.dart';
+import 'package:flutter_application_1/view/notificationScreen.dart';
+import 'package:flutter_application_1/view_model/dislike_view_model.dart';
 import 'package:flutter_application_1/view_model/viewmodel/User_feeds_model.dart';
 import 'package:flutter_application_1/view_model/viewmodel/auth_view_model.dart';
+import 'package:flutter_application_1/view_model/viewmodel/like_notification_view_modal.dart';
 import 'package:flutter_application_1/view_model/viewmodel/like_view_model.dart';
 import 'package:flutter_application_1/view_model/viewmodel/report_post_viewModel.dart';
 import 'package:provider/provider.dart';
@@ -22,6 +25,9 @@ class _Home_pageState extends State<Home_page> {
   UserFeedsViewModel userFeedsViewModel = UserFeedsViewModel();
   LikePostViewModel likePostViewModel = LikePostViewModel();
   ReportPostViewModel reportPostViewModel = ReportPostViewModel();
+  DisLikePostViewModel disLikePostViewModel = DisLikePostViewModel();
+  PostNotificationViewModel postNotificationViewModel =
+      PostNotificationViewModel();
 
   bool isFavorite = false;
 
@@ -43,6 +49,15 @@ class _Home_pageState extends State<Home_page> {
     debugPrint("in homepage");
     userFeedsViewModel.fetchUserfeeds();
     super.initState();
+  }
+
+  String? userId;
+  void getUserIdFromSharedPreferences() async {
+    userId = await SharedPreferencesManager.getUSerId();
+
+    debugPrint("--------------userId------------");
+    debugPrint(userId ?? "User ID is null");
+    debugPrint("--------------userId------------");
   }
 
   @override
@@ -71,7 +86,7 @@ class _Home_pageState extends State<Home_page> {
                   automaticallyImplyLeading: false,
                   elevation: 3,
                   centerTitle: true,
-                  title:  Text(
+                  title: Text(
                     "Instagram",
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
@@ -80,11 +95,14 @@ class _Home_pageState extends State<Home_page> {
                   ),
                   actions: [
                     IconButton(
-                      onPressed: () {},
-                      icon: const Icon(
-                        Icons.favorite_border,
-                        size: 30,
-                      ),
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => NotificationScreen()));
+                      },
+                      icon: const Icon(Icons.notifications_active_outlined,
+                          size: 30, color: Colors.black),
                     ),
                   ],
                 ),
@@ -258,6 +276,7 @@ class _Home_pageState extends State<Home_page> {
                                       value.userFeeds.data!.userFeed[index]
                                           .userPosts.url
                                           .toString(),
+                                      fit: BoxFit.cover,
                                       loadingBuilder: (BuildContext context,
                                           Widget child,
                                           ImageChunkEvent? loadingProgress) {
@@ -303,39 +322,97 @@ class _Home_pageState extends State<Home_page> {
                                   ),
                                   Row(
                                     children: [
-                                      IconButton(
-                                        onPressed: () {
-                                          likePostViewModel.LikePostApi(
+                                      // IconButton(
+                                      //   onPressed: () {
+                                      //     likePostViewModel.LikePostApi(
+                                      //         value.userFeeds.data!
+                                      //             .userFeed[index].userPosts.id
+                                      //             .toString(),
+                                      //         context);
+                                      //     debugPrint(
+                                      //       value.userFeeds.data!
+                                      //           .userFeed[index].userPosts.id
+                                      //           .toString(),
+                                      //     );
+
+                                      //     isFavoriteList[index]
+                                      //         .value = !isFavoriteList[
+                                      //             index]
+                                      //         .value; // Toggle the favorite state
+                                      //     debugPrint("Api hit");
+                                      //   },
+                                      //   icon: ValueListenableBuilder<bool>(
+                                      //     valueListenable:
+                                      //         isFavoriteList[index],
+                                      //     builder:
+                                      //         (context, isFavorite, child) {
+                                      //       return Icon(
+                                      //         isFavorite
+                                      //             ? Icons.favorite
+                                      //             : Icons.favorite_border,
+                                      //         color: isFavorite
+                                      //             ? Colors.red
+                                      //             : Colors.black,
+                                      //       );
+                                      //     },
+                                      //   ),
+                                      // ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          if (value
+                                              .userFeeds
+                                              .data!
+                                              .userFeed[index]
+                                              .userPosts
+                                              .isLiked) {
+                                            // Call the DisLikePostApi when the user has already liked the post
+                                            disLikePostViewModel.DisLikePostApi(
                                               value.userFeeds.data!
                                                   .userFeed[index].userPosts.id
                                                   .toString(),
-                                              context);
-                                          debugPrint(
-                                            value.userFeeds.data!
-                                                .userFeed[index].userPosts.id
-                                                .toString(),
-                                          );
-
-                                          isFavoriteList[index]
-                                              .value = !isFavoriteList[
-                                                  index]
-                                              .value; // Toggle the favorite state
-                                          debugPrint("Api hit");
-                                        },
-                                        icon: ValueListenableBuilder<bool>(
-                                          valueListenable:
-                                              isFavoriteList[index],
-                                          builder:
-                                              (context, isFavorite, child) {
-                                            return Icon(
-                                              isFavorite
-                                                  ? Icons.favorite
-                                                  : Icons.favorite_border,
-                                              color: isFavorite
-                                                  ? Colors.red
-                                                  : Colors.black,
+                                              context,
                                             );
-                                          },
+                                          } else {
+                                            // Call the LikePostApi when the user hasn't liked the post
+                                            likePostViewModel.LikePostApi(
+                                              value.userFeeds.data!
+                                                  .userFeed[index].userPosts.id
+                                                  .toString(),
+                                              context,
+                                            );
+
+                                            Map data = {
+                                              "receiverId": value
+                                                  .userFeeds
+                                                  .data!
+                                                  .userFeed[index]
+                                                  .userData
+                                                  .id,
+                                              "activityId": value
+                                                  .userFeeds
+                                                  .data!
+                                                  .userFeed[index]
+                                                  .userPosts
+                                                  .id
+                                                  .toString(),
+                                              "type": "LIKE",
+                                            };
+                                            postNotificationViewModel
+                                                .deleteCommentApi(
+                                                    data, context);
+                                          }
+                                          userFeedsViewModel.fetchUserfeeds();
+                                        },
+                                        child: Icon(
+                                          Icons.favorite,
+                                          color: value
+                                                  .userFeeds
+                                                  .data!
+                                                  .userFeed[index]
+                                                  .userPosts
+                                                  .isLiked
+                                              ? Colors.red
+                                              : Colors.grey,
                                         ),
                                       ),
                                       IconButton(
@@ -345,7 +422,8 @@ class _Home_pageState extends State<Home_page> {
                                               .toString();
                                           _showBottomSheet(context, postId);
                                         },
-                                        icon: const Icon(Icons.chat_bubble_outline),
+                                        icon: const Icon(
+                                            Icons.chat_bubble_outline),
                                       ),
                                     ],
                                   ),

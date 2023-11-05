@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/provider/passwordVisibility.dart';
 import 'package:flutter_application_1/provider/sign_up.dart';
 import 'package:flutter_application_1/res/component/app_images.dart';
 import 'package:flutter_application_1/res/component/round_button.dart';
@@ -27,6 +28,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final usernameController = TextEditingController();
+  final passwordFocusNode = FocusNode();
 
   @override
   void dispose() {
@@ -96,20 +98,55 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 SizedBox(
                   height: MediaQuery.of(context).size.height * .010,
                 ),
-                CustomTextField(
-                  hintText: "Password",
-                  // keyboardType: TextInputType.emailAddress,
-                  controller: passwordController,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return "password cannot be empty";
-                    }
-                    return null;
-                    // return null;
-                    // Add password validation logic here
+                Consumer<PasswordVisibilityNotifier>(
+                  builder: (context, passwordVisibilityNotifier, child) {
+                    return CustomTextField(
+                      controller: passwordController,
+                      prefixIcon: Icons.lock,
+                      obscureText:
+                          !passwordVisibilityNotifier.isPassword1Visible,
+                      focusNode: passwordFocusNode,
+                      hintText: "Enter Password",
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Please Enter your password";
+                        }
+                        // if (!passwordRegex.hasMatch(value)) {
+                        //   return "Password must contain at least one lowercase letter,\n one uppercase letter, one number, one special character, and be at least 6 characters long.";
+                        // }
+                        return null;
+                      },
+                      onTap: () {
+                        passwordFocusNode.requestFocus();
+                      },
+                      suffixIcon: GestureDetector(
+                        onTap: () {
+                          passwordVisibilityNotifier
+                              .togglePassword1Visibility();
+                        },
+                        child: Icon(
+                          passwordVisibilityNotifier.isPassword1Visible
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                        ),
+                      ),
+                    );
                   },
-                  prefixIcon: Icons.lock,
                 ),
+                // CustomTextField(
+                //   hintText: "Password",
+                //   // keyboardType: TextInputType.emailAddress,
+                //   controller: passwordController,
+                //   validator: (value) {
+                //     if (value == null || value.isEmpty) {
+                //       return "password cannot be empty";
+                //     }
+                //     return null;
+                //     // return null;
+                //     // Add password validation logic here
+                //   },
+                //   prefixIcon: Icons.lock,
+                // ),
                 SizedBox(
                   height: MediaQuery.of(context).size.height * .009,
                 ),

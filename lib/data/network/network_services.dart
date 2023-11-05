@@ -54,6 +54,139 @@ class NetworkApiService extends BaseApiServices {
     return responseJson;
   }
 
+  Future getGetApi(String url, dynamic header) async {
+    dynamic responseJson;
+
+    try {
+      final response = await http
+          .get(Uri.parse(url), headers: header)
+          .timeout(const Duration(seconds: 10));
+      // debugPrint("******* responseJson  $response*********");
+
+      responseJson = returnResponse(response);
+      print("------------------responseJson-------------");
+      print(responseJson.toString());
+    } on SocketException {
+      throw FetchDataException('No Internet Connection');
+    }
+    return responseJson;
+  }
+  Future editCommentAp(String url, dynamic data, dynamic header) async {
+    dynamic responseJson;
+
+    try {
+      final response = await http
+          .patch(
+            Uri.parse(url),
+            body: jsonEncode(data),
+            headers: header,
+          )
+          .timeout(Duration(seconds: 10));
+
+      responseJson = returnResponse(response);
+    } on SocketException {
+      throw FetchDataException("No Internet Connection");
+    }
+    return responseJson;
+  }
+  Future getPostApiResponseForFollowUser(
+      String url, dynamic data, dynamic header) async {
+    dynamic responseJson;
+    Map map = {"followingId": data};
+
+    try {
+      final response = await http
+          .post(
+            Uri.parse(url),
+            body: jsonEncode(map),
+            headers: header,
+          )
+          .timeout(const Duration(seconds: 10));
+      responseJson = returnResponse(response);
+      debugPrint("follow user api call 3");
+      debugPrint(responseJson);
+    } on SocketException {
+      debugPrint(responseJson.toString());
+      throw FetchDataException(" No Internet Connection");
+    }
+    return responseJson;
+  }
+
+  Future getPostDislike(String url, dynamic header) async {
+    dynamic responseJson;
+
+    try {
+      final response = await http
+          .patch(
+            Uri.parse(url),
+            headers: header,
+          )
+          .timeout(Duration(seconds: 10));
+
+      responseJson = returnResponse(response);
+      debugPrint(response.toString());
+    } on SocketException {
+      throw FetchDataException("No Internet Connection");
+    }
+    return responseJson;
+  }
+
+  Future deleteComment(String url, dynamic header) async {
+    dynamic responseJson;
+
+    try {
+      final response = await http
+          .delete(
+            Uri.parse(url),
+            headers: header,
+          )
+          .timeout(Duration(seconds: 10));
+      debugPrint(response.toString());
+
+      responseJson = returnResponse(response);
+    } on SocketException {
+      throw FetchDataException('No Internet Connection');
+    }
+    return responseJson;
+  }
+
+  // Future editCommentAp(String url, dynamic data, dynamic header) async {
+  //   dynamic responseJson;
+
+  //   try {
+  //     final response = await http
+  //         .patch(
+  //           Uri.parse(url),
+  //           body: jsonEncode(data),
+  //           headers: header,
+  //         )
+  //         .timeout(Duration(seconds: 10));
+
+  //     responseJson = returnResponse(response);
+  //   } on SocketException {
+  //     throw FetchDataException("No Internet Connection");
+  //   }
+  //   return responseJson;
+  // }
+
+  Future getGetApiResponseNew(String url, dynamic header) async {
+    dynamic responseJson;
+
+    try {
+      final response = await http
+          .get(Uri.parse(url), headers: header)
+          .timeout(const Duration(seconds: 10));
+      // debugPrint("******* responseJson  $response*********");
+
+      responseJson = returnResponse(response);
+      print("------------------responseJson-------------");
+      print(responseJson.toString());
+    } on SocketException {
+      throw FetchDataException('No Internet Connection');
+    }
+    return responseJson;
+  }
+
   @override
   Future getDeleteApiResponse(String url, {Map<String, String>? header}) async {
     dynamic responseJson;
@@ -117,6 +250,61 @@ class NetworkApiService extends BaseApiServices {
       // Handle network errors here
       throw Exception('Failed to patch data: $error');
     }
+  }
+
+  Future deleteNotification(String url, dynamic header) async {
+    dynamic responseJson;
+
+    try {
+      final response = await http
+          .delete(
+            Uri.parse(url),
+            headers: header,
+          )
+          .timeout(Duration(seconds: 10));
+
+      responseJson = returnResponse(response);
+      debugPrint(response.toString());
+    } on SocketException {
+      throw FetchDataException("No Internet Connection");
+    }
+    return responseJson;
+  }
+
+  Future getGetApiResponse4(String url, dynamic header) async {
+    dynamic responseJson;
+
+    try {
+      final response = await http
+          .get(Uri.parse(url), headers: header)
+          .timeout(const Duration(seconds: 10));
+      // debugPrint("******* responseJson  $response*********");
+
+      responseJson = returnResponse(response);
+      print("------------------responseJson-------------");
+      print(responseJson.toString());
+    } on SocketException {
+      throw FetchDataException('No Internet Connection');
+    }
+    return responseJson;
+  }
+
+  Future getGetApiResponse3(String url, dynamic header) async {
+    dynamic responseJson;
+
+    try {
+      final response = await http
+          .get(Uri.parse(url), headers: header)
+          .timeout(const Duration(seconds: 10));
+      // debugPrint("******* responseJson  $response*********");
+
+      responseJson = returnResponse(response);
+      print("------------------responseJson-------------");
+      print(responseJson.toString());
+    } on SocketException {
+      throw FetchDataException('No Internet Connection');
+    }
+    return responseJson;
   }
 
   Future PostCommentApiResponse(

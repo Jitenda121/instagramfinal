@@ -2,8 +2,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/data/response/status.dart';
+import 'package:flutter_application_1/respository/edit_comment_repository.dart';
 import 'package:flutter_application_1/view_model/viewmodel/Likelist_view_model.dart';
 import 'package:flutter_application_1/view_model/viewmodel/comment_list_view_model.dart';
+import 'package:flutter_application_1/view_model/viewmodel/delete_comment_view_model.dart';
+import 'package:flutter_application_1/view_model/viewmodel/edit_comment_view_modal.dart';
 
 import 'package:provider/provider.dart';
 
@@ -17,6 +20,8 @@ class CommentScreen extends StatefulWidget {
 
 class _CommentScreenState extends State<CommentScreen> {
   CommentlistViewModel commentlistViewModel = CommentlistViewModel();
+  DeleteCommentViewModel deleteCommentViewModel = DeleteCommentViewModel();
+  EditCommentViewModel editCommentViewModel = EditCommentViewModel();
 
   @override
   void initState() {
@@ -97,7 +102,16 @@ class _CommentScreenState extends State<CommentScreen> {
                                         followers
                                             .data.comments[index].comment ??
                                     ""),
-                                // trailing: SizedBox(
+                                trailing: InkWell(
+                                    onTap: () {
+                                      _openOptionsDialog(
+                                          context,
+                                          followers
+                                              .data.comments[index].CommentsId
+                                              .toString());
+                                    },
+                                    child: Icon(Icons.more_vert)),
+                                // SizedBox(
                                 //     height: 35,
                                 //     width: 90,
                                 //     child: RoundedButton(
@@ -114,5 +128,94 @@ class _CommentScreenState extends State<CommentScreen> {
                   return Container();
               }
             })));
+  }
+
+  Future<void> _openOptionsDialog(
+      BuildContext context, String commentId) async {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text("Comment Options"),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              ListTile(
+                title: const Text("Edit Comment"),
+                onTap: () {
+                  Navigator.pop(context);
+                  _openEditCommentDialog(context, commentId);
+                  // Close the dialog
+                  // Navigate to the edit comment screen or perform edit action here
+                },
+              ),
+              ListTile(
+                title: const Text("Delete Comment"),
+                onTap: () {
+                  deleteCommentViewModel.deleteCommentApi(
+                      widget.postId, commentId, context);
+                  commentlistViewModel.fetchCommentlist(widget.postId);
+                  Navigator.pop(context); // Close the dialog
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> _openEditCommentDialog(
+      BuildContext context, String commentId) async {
+    final TextEditingController commentController = TextEditingController();
+
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              title: const Text("Edit Comment"),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  TextField(
+                    controller: commentController,
+                    decoration: const InputDecoration(
+                      hintText: "Edit your comment...",
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: <Widget>[
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.pop(context); // Close the dialog
+                        },
+                        child: const Text("Cancel"),
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          // Save the edited comment (editedComment) and perform the edit action
+                          Map<String, dynamic> data = {
+                            "comment": commentController.text.toString()
+                          };
+
+                          editCommentViewModel.editCommentApi(
+                              widget.postId, commentId, data, context);
+                          commentlistViewModel.fetchCommentlist(widget.postId);
+                          Navigator.pop(context); // Close the dialog
+                        },
+                        child: const Text("Save"),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
   }
 }

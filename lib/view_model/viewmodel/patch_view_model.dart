@@ -16,3 +16,21 @@ class EditViewModel with ChangeNotifier{
     });
   }
 }
+
+// class EditViewModel with ChangeNotifier {
+//   final _myRepo = EditProfileRepository();
+
+//   Future<bool> editProfileApi(dynamic data, BuildContext context) async {
+//     try {
+//       await _myRepo.editProfileApi(data);
+//       Utils.toastMessage('Profile edited successfully');
+//       return true;
+//     } catch (error) {
+//       Utils.flashBarErrorMessage('Error editing profile: $error', context);
+//       if (kDebugMode) {
+//         print(error.toString());
+//       }
+//       return false;
+//     }
+//   }
+// }

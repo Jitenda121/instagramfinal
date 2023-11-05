@@ -13,10 +13,9 @@ class RoutesName {
   //static const String Home1 = "HomePage";
   static const String search = "SearchPage";
   static const String owner = "OwnerProfile";
-  static const String followers = "Followers";
+  static const String followers = "FollowersScreen";
   static const String following = "Following";
   static const String editprofile = "EditProfile";
   static const String userprofile = "OwnerProfile";
-  static const String homepage1= "Home_page";
+  static const String homepage1 = "Home_page";
 }
-

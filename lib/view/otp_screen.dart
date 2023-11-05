@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_application_1/res/component/app_images.dart';
-import 'package:flutter_application_1/res/component/round_button.dart';
-import 'package:flutter_application_1/utils/routes/routes_name.dart';
 import 'package:flutter_application_1/utils/utils.dart';
 import 'package:flutter_application_1/view_model/viewmodel/auth_view_model.dart';
 import 'package:flutter_application_1/view_model/viewmodel/custombutton.dart';

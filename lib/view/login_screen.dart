@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/provider/passwordVisibility.dart';
 import 'package:flutter_application_1/res/component/app_images.dart';
 import 'package:flutter_application_1/res/component/round_button.dart';
 import 'package:flutter_application_1/utils/routes/routes_name.dart';
-import 'package:flutter_application_1/utils/utils.dart';
 import 'package:flutter_application_1/view_model/viewmodel/auth_view_model.dart';
-//import 'package:flutter_application_1/view/forget_password.dart';
-//import 'package:flutter_application_1/view/sign_up.dart';
-//import 'package:flutter_application_1/view_model/widget/auth_view_model.dart';
 import 'package:flutter_application_1/view_model/viewmodel/custom_text.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
@@ -24,6 +21,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   //final authviewmode = Provider.of<AuthViewModel>(context);
+  final passwordFocusNode = FocusNode();
 
   @override
   void dispose() {
@@ -81,22 +79,57 @@ class _LoginScreenState extends State<LoginScreen> {
                 SizedBox(
                   height: MediaQuery.of(context).size.height * .01,
                 ),
-                CustomTextField(
-                  prefixIcon: Icons.lock,
-                  hintText: "Password",
-                  //keyboardType:TextInputType.name,
-
-                  controller: passwordController,
-                  //obscureText: true,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      // Utils.toastMessage("Please fill Password");
-                      return 'Password cannot be empty';
-                    }
-                    // You can add more password validation logic if needed
-                    return null;
+                Consumer<PasswordVisibilityNotifier>(
+                  builder: (context, passwordVisibilityNotifier, child) {
+                    return CustomTextField(
+                      controller: passwordController,
+                      prefixIcon: Icons.lock,
+                      obscureText:
+                          !passwordVisibilityNotifier.isPassword1Visible,
+                      focusNode: passwordFocusNode,
+                      hintText: "Enter Password",
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Please Enter your password";
+                        }
+                        // if (!passwordRegex.hasMatch(value)) {
+                        //   return "Password must contain at least one lowercase letter,\n one uppercase letter, one number, one special character, and be at least 6 characters long.";
+                        // }
+                        return null;
+                      },
+                      onTap: () {
+                        passwordFocusNode.requestFocus();
+                      },
+                      suffixIcon: GestureDetector(
+                        onTap: () {
+                          passwordVisibilityNotifier
+                              .togglePassword1Visibility();
+                        },
+                        child: Icon(
+                          passwordVisibilityNotifier.isPassword1Visible
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                        ),
+                      ),
+                    );
                   },
                 ),
+                // CustomTextField(
+                //   prefixIcon: Icons.lock,
+                //   hintText: "Password",
+                //   //keyboardType:TextInputType.name,
+
+                //   controller: passwordController,
+                //   //obscureText: true,
+                //   validator: (value) {
+                //     if (value == null || value.isEmpty) {
+                //       // Utils.toastMessage("Please fill Password");
+                //       return 'Password cannot be empty';
+                //     }
+                //     // You can add more password validation logic if needed
+                //     return null;
+                //   },
+                // ),
                 SizedBox(
                   height: MediaQuery.of(context).size.height * .01,
                 ),
@@ -163,5 +196,4 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
-
 }

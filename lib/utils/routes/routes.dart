@@ -8,6 +8,7 @@ import 'package:flutter_application_1/view/bottom_navigationbartab/home.dart';
 import 'package:flutter_application_1/view/bottom_navigationbartab/search.dart';
 import 'package:flutter_application_1/view/complete_profile.dart';
 import 'package:flutter_application_1/view/edit_profile.dart';
+import 'package:flutter_application_1/view/follower_user.dart';
 import 'package:flutter_application_1/view/forget_password.dart';
 import 'package:flutter_application_1/view/homepage.dart';
 import 'package:flutter_application_1/view/login_screen.dart';
@@ -35,7 +36,7 @@ class Routes {
 
       case RoutesName.search:
         return MaterialPageRoute(
-            builder: (BuildContext context) => const Search_Page());
+            builder: (BuildContext context) => SearchPage());
 
       case RoutesName.splash:
         return MaterialPageRoute(
@@ -97,10 +98,13 @@ class Routes {
       case RoutesName.userprofile:
         return MaterialPageRoute(
             builder: (BuildContext context) => const OwnerProfile());
-
-      case RoutesName.owner:
+      case RoutesName.followers:
         return MaterialPageRoute(
-            builder: (BuildContext context) => const OwnerProfile());
+            builder: (BuildContext context) => const FollowersScreen());
+
+      // case RoutesName.owner:
+      //   return MaterialPageRoute(
+      //       builder: (BuildContext context) => const OwnerProfile());
       default:
         return MaterialPageRoute(
             builder: (_) => const Scaffold(

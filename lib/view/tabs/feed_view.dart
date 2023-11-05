@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/data/response/status.dart';
+import 'package:flutter_application_1/view/image_view_screen.dart';
 import 'package:flutter_application_1/view_model/user_view_model.dart';
 import 'package:flutter_application_1/view_model/viewmodel/auth_view_model.dart';
 import 'package:provider/provider.dart';
@@ -53,9 +54,21 @@ class _FeedViewState extends State<FeedView> {
                 ),
                 itemBuilder: (context, index) => GestureDetector(
                   onTap: () {
-                    String postId = value.userProfile.data!.data.userPofile[0]
+                    dynamic postId = value.userProfile.data!.data.userPofile[0]
                         .userPosts[index].id;
-                    _showImageDialog(context, postImages[index], postId);
+                    final imageUrl = postImages[index];
+                    debugPrint(postId);
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => ImageViewScreen(
+                          imageUrl: imageUrl,
+                          postId: postId,
+                        ),
+                      ),
+                    );
+                    // String postId = value.userProfile.data!.data.userPofile[0]
+                    //     .userPosts[index].id;
+                    // _showImageDialog(context, postImages[index], postId);
                   },
                   child: Padding(
                     padding: const EdgeInsets.all(4.0),
@@ -104,72 +117,6 @@ class _FeedViewState extends State<FeedView> {
           }
         },
       ),
-    );
-  }
-
-  void confirmDeleteImageDialogBox(
-      BuildContext context, String imageId, AuthViewModel authViewModel) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Delete Image'),
-          content: const Text('Are you sure you want to delete this image?'),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
-              },
-              child: const Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () {
-                // Access authViewModel here and perform necessary actions
-                // Replace doSomething() with the actual function you want to call
-                Map data = {"postId": imageId};
-
-                authViewModel.deletePost(data, context);
-                Navigator.of(context).pop(); // Close the dialog
-              },
-              child: const Text('Delete', style: TextStyle(color: Colors.red)),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  void _showImageDialog(BuildContext context, String imageUrl, String postId) {
-    final authViewModel = Provider.of<AuthViewModel>(context, listen: false);
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return Dialog(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Image.network(imageUrl, fit: BoxFit.cover),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  TextButton(
-                    onPressed: () {
-                      debugPrint(postId);
-                      Navigator.pop(context);
-                      confirmDeleteImageDialogBox(
-                          context, postId, authViewModel);
-                    },
-                    child: const Text(
-                      "Delete Post",
-                      style: TextStyle(fontSize: 18, color: Colors.red),
-                    ),
-                  )
-                ],
-              ),
-            ],
-          ),
-        );
-      },
     );
   }
 }
