@@ -47,7 +47,6 @@ class _LikelistScreenState extends State<LikelistScreen> {
                   debugPrint("Success");
                   final followers = value.listList.data;
                   return SizedBox(
-               
                     height: MediaQuery.of(context).size.height,
                     child: followers!.data.likes.isEmpty
                         ? const Center(
@@ -62,7 +61,9 @@ class _LikelistScreenState extends State<LikelistScreen> {
                                   // radius: 50,
                                   child: ClipOval(
                                     child: Image.network(
-                                      followers.data.likes[0].user.profilePic,
+                                      followers.data.likes[index].user
+                                              .profilePic ??
+                                          "",
                                       width:
                                           60, // Set the desired width to maintain circular shape
                                       height:

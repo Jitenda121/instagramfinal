@@ -24,7 +24,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
   @override
   void initState() {
     super.initState();
-    print("in commentList Page");
+   // print("in commentList Page");
     notificationlistViewModel.fetchNotificationlist();
     //print("in Followers 1");
   }
@@ -37,7 +37,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
           backgroundColor: Colors.blue,
           title: const Text("Notifications"),
           leading: IconButton(
-            icon: Icon(Icons.arrow_back), // Use the appropriate icon for iOS
+            icon: const Icon(Icons.arrow_back), // Use the appropriate icon for iOS
             onPressed: () {
               Navigator.of(context)
                   .pop(); // This will navigate back when the button is pressed
@@ -70,17 +70,42 @@ class _NotificationScreenState extends State<NotificationScreen> {
                             itemBuilder: (context, index) {
                               return ListTile(
                                 onTap: () {},
-                                leading: const CircleAvatar(
-                                  child: Icon(
-                                    Icons.person,
-                                    size: 30,
+                                leading: CircleAvatar(
+                                  child: value.listList.data!.data[index]
+                                              .image !=
+                                          null
+                                      ?
+                                      ClipOval(
+                                          child: Image.network(
+                                            value.listList.data!.data[index]
+                                                .image,
+                                           
+                                            fit: BoxFit.cover,
+                                            width: 60,
+                                            height: 60,
+                                          ),
+                                        )
+                                      : const Icon(
+                                          Icons.person,
+                                          size: 30,
+                                        ),
+                                ),
+                                title: RichText(
+                                  text: TextSpan(
+                                    text:
+                                        notifications.data[index].message ?? "",
+                                    style: const TextStyle(
+                                      color: Colors
+                                          .black, // You can set the color as per your requirement
+                                      fontSize:
+                                          16, // You can set the font size as per your requirement
+                                      fontWeight: FontWeight
+                                          .bold, // You can set the font weight as per your requirement
+                                    ),
+                                    // You can add more TextSpans here with different styles if needed
                                   ),
                                 ),
-                                title: Text(
-                                    notifications.data[index].message ?? ""),
-                                // subtitle: Text("status :" +
-                                //         notifications.data[index].status ??
-                                //     ""),
+                              
                                 trailing: InkWell(
                                     onTap: () {
                                       showReportConfirmationDialog(
@@ -88,7 +113,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                           notifications.data[index].id
                                               .toString());
                                     },
-                                    child: Icon(Icons.delete)),
+                                    child: const Icon(Icons.delete)),
                               );
                             }),
                   );

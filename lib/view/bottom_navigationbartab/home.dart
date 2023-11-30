@@ -1,5 +1,7 @@
+// ignore_for_file: use_build_context_synchronously
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/data/response/status.dart';
+import 'package:flutter_application_1/model/User_feeds.dart';
 import 'package:flutter_application_1/res/colors.dart';
 import 'package:flutter_application_1/respository/shared_preference.dart';
 import 'package:flutter_application_1/view/Likelist_Screen.dart';
@@ -48,16 +50,13 @@ class _Home_pageState extends State<Home_page> {
   void initState() {
     debugPrint("in homepage");
     userFeedsViewModel.fetchUserfeeds();
+    getUserIdFromSharedPreferences();
     super.initState();
   }
 
   String? userId;
   void getUserIdFromSharedPreferences() async {
     userId = await SharedPreferencesManager.getUSerId();
-
-    debugPrint("--------------userId------------");
-    debugPrint(userId ?? "User ID is null");
-    debugPrint("--------------userId------------");
   }
 
   @override
@@ -99,7 +98,8 @@ class _Home_pageState extends State<Home_page> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => NotificationScreen()));
+                                builder: (context) =>
+                                    const NotificationScreen()));
                       },
                       icon: const Icon(Icons.notifications_active_outlined,
                           size: 30, color: Colors.black),
@@ -118,6 +118,8 @@ class _Home_pageState extends State<Home_page> {
                             itemCount: value.userFeeds.data!.userFeed.length,
                             //itemCount: 9,
                             itemBuilder: (context, index) {
+                              UserFeed userFeedData =
+                                  value.userFeeds.data!.userFeed[index];
                               return Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -131,19 +133,15 @@ class _Home_pageState extends State<Home_page> {
                                           child: Stack(
                                             alignment: Alignment.center,
                                             children: [
-                                              CircularProgressIndicator(
+                                              const CircularProgressIndicator(
                                                 valueColor:
                                                     AlwaysStoppedAnimation<
                                                         Color>(Colors.blue),
                                               ),
                                               ClipOval(
                                                 child: Image.network(
-                                                  value
-                                                      .userFeeds
-                                                      .data!
-                                                      .userFeed[index]
-                                                      .userData
-                                                      .profilePic
+                                                  userFeedData
+                                                      .userData.profilePic
                                                       .toString(),
                                                   width: 100,
                                                   height: 100,
@@ -170,7 +168,7 @@ class _Home_pageState extends State<Home_page> {
                                                                       1)
                                                               : null,
                                                           valueColor:
-                                                              AlwaysStoppedAnimation<
+                                                              const AlwaysStoppedAnimation<
                                                                       Color>(
                                                                   Colors.blue),
                                                         ),
@@ -187,7 +185,7 @@ class _Home_pageState extends State<Home_page> {
                                         value.userFeeds.data!.userFeed[index]
                                             .userData.username
                                             .toString(),
-                                        style: TextStyle(fontSize: 20),
+                                        style: const TextStyle(fontSize: 20),
                                       ),
                                       const Spacer(),
                                       IconButton(
@@ -198,19 +196,20 @@ class _Home_pageState extends State<Home_page> {
                                               return AlertDialog(
                                                 title: InkWell(
                                                     onTap: () {},
-                                                    child: Text("Report")),
-                                                content: Text(
+                                                    child:
+                                                        const Text("Report")),
+                                                content: const Text(
                                                     "Do you want to report this Post?"),
                                                 actions: <Widget>[
                                                   TextButton(
-                                                    child: Text("Cancel"),
+                                                    child: const Text("Cancel"),
                                                     onPressed: () {
                                                       Navigator.of(context)
                                                           .pop();
                                                     },
                                                   ),
                                                   TextButton(
-                                                    child: Text("Report"),
+                                                    child: const Text("Report"),
                                                     onPressed: () {
                                                       // Perform additional actions when the user reports the content
                                                       showDialog(
@@ -218,14 +217,15 @@ class _Home_pageState extends State<Home_page> {
                                                         builder: (BuildContext
                                                             context) {
                                                           return AlertDialog(
-                                                            title: Text(
+                                                            title: const Text(
                                                                 "Report Confirmation"),
-                                                            content: Text(
+                                                            content: const Text(
                                                                 "Are you sure to report this post"),
                                                             actions: <Widget>[
                                                               TextButton(
                                                                 child:
-                                                                    Text("OK"),
+                                                                    const Text(
+                                                                        "OK"),
                                                                 onPressed: () {
                                                                   debugPrint(value
                                                                       .userFeeds
@@ -235,6 +235,7 @@ class _Home_pageState extends State<Home_page> {
                                                                       .userPosts
                                                                       .id
                                                                       .toString());
+
                                                                   reportPostViewModel.reportPostApi(
                                                                       value
                                                                           .userFeeds
@@ -268,7 +269,7 @@ class _Home_pageState extends State<Home_page> {
                                       )
                                     ],
                                   ),
-                                  Container(
+                                  SizedBox(
                                     height: MediaQuery.of(context).size.height *
                                         0.30,
                                     width: MediaQuery.of(context).size.width,
@@ -304,7 +305,7 @@ class _Home_pageState extends State<Home_page> {
                                           Object error,
                                           StackTrace? stackTrace) {
                                         // Handle errors here
-                                        return Center(
+                                        return const Center(
                                             child: Text('Error loading image'));
                                       },
                                     ),
@@ -314,7 +315,7 @@ class _Home_pageState extends State<Home_page> {
                                         8.0), // Add some padding for the caption
                                     child: Text(
                                       'Caption  :${value.userFeeds.data!.userFeed[index].userPosts.caption}', // Replace with your actual caption
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold,
                                       ),
@@ -322,86 +323,102 @@ class _Home_pageState extends State<Home_page> {
                                   ),
                                   Row(
                                     children: [
-                                      // IconButton(
-                                      //   onPressed: () {
-                                      //     likePostViewModel.LikePostApi(
-                                      //         value.userFeeds.data!
-                                      //             .userFeed[index].userPosts.id
-                                      //             .toString(),
-                                      //         context);
-                                      //     debugPrint(
-                                      //       value.userFeeds.data!
-                                      //           .userFeed[index].userPosts.id
-                                      //           .toString(),
-                                      //     );
-
-                                      //     isFavoriteList[index]
-                                      //         .value = !isFavoriteList[
-                                      //             index]
-                                      //         .value; // Toggle the favorite state
-                                      //     debugPrint("Api hit");
-                                      //   },
-                                      //   icon: ValueListenableBuilder<bool>(
-                                      //     valueListenable:
-                                      //         isFavoriteList[index],
-                                      //     builder:
-                                      //         (context, isFavorite, child) {
-                                      //       return Icon(
-                                      //         isFavorite
-                                      //             ? Icons.favorite
-                                      //             : Icons.favorite_border,
-                                      //         color: isFavorite
-                                      //             ? Colors.red
-                                      //             : Colors.black,
-                                      //       );
-                                      //     },
-                                      //   ),
-                                      // ),
                                       GestureDetector(
-                                        onTap: () {
-                                          if (value
+                                        onTap: () async {
+                                          value.userFeeds.data!.userFeed[index]
+                                                  .userPosts.isLiked =
+                                              !(value
+                                                  .userFeeds
+                                                  .data!
+                                                  .userFeed[index]
+                                                  .userPosts
+                                                  .isLiked);
+                                          setState(() {});
+                                          if (!(value
                                               .userFeeds
                                               .data!
                                               .userFeed[index]
                                               .userPosts
-                                              .isLiked) {
+                                              .isLiked)) {
+                                            value
+                                                .userFeeds
+                                                .data!
+                                                .userFeed[index]
+                                                .userPosts
+                                                .likeCount = value
+                                                    .userFeeds
+                                                    .data!
+                                                    .userFeed[index]
+                                                    .userPosts
+                                                    .likeCount -
+                                                1;
+                                            setState(() {});
                                             // Call the DisLikePostApi when the user has already liked the post
-                                            disLikePostViewModel.DisLikePostApi(
+
+                                            await disLikePostViewModel
+                                                .DisLikePostApi(
                                               value.userFeeds.data!
                                                   .userFeed[index].userPosts.id
                                                   .toString(),
                                               context,
                                             );
                                           } else {
+                                            value
+                                                .userFeeds
+                                                .data!
+                                                .userFeed[index]
+                                                .userPosts
+                                                .likeCount = value
+                                                    .userFeeds
+                                                    .data!
+                                                    .userFeed[index]
+                                                    .userPosts
+                                                    .likeCount +
+                                                1;
+                                            setState(() {});
                                             // Call the LikePostApi when the user hasn't liked the post
-                                            likePostViewModel.LikePostApi(
+                                            // final result =
+                                            await likePostViewModel.LikePostApi(
                                               value.userFeeds.data!
                                                   .userFeed[index].userPosts.id
                                                   .toString(),
                                               context,
                                             );
 
-                                            Map data = {
-                                              "receiverId": value
-                                                  .userFeeds
-                                                  .data!
-                                                  .userFeed[index]
-                                                  .userData
-                                                  .id,
-                                              "activityId": value
-                                                  .userFeeds
-                                                  .data!
-                                                  .userFeed[index]
-                                                  .userPosts
-                                                  .id
-                                                  .toString(),
-                                              "type": "LIKE",
-                                            };
-                                            postNotificationViewModel
-                                                .deleteCommentApi(
-                                                    data, context);
+                                            if (userId !=
+                                                value
+                                                    .userFeeds
+                                                    .data!
+                                                    .userFeed[index]
+                                                    .userPosts
+                                                    .userId) {
+                                              Map data = {
+                                                "receiverId": value
+                                                    .userFeeds
+                                                    .data!
+                                                    .userFeed[index]
+                                                    .userData
+                                                    .id,
+                                                "activityId": value
+                                                    .userFeeds
+                                                    .data!
+                                                    .userFeed[index]
+                                                    .userPosts
+                                                    .id
+                                                    .toString(),
+                                                "type": "LIKE",
+                                              };
+                                              postNotificationViewModel
+                                                  .deleteCommentApi(
+                                                      data, context);
+                                            }
+                                            // if (result) {
+                                            //   // Fetch user feeds only if the LikePostApi was successful
+                                            //   await userFeedsViewModel
+                                            //       .fetchUserfeeds();
+                                            // }
                                           }
-                                          userFeedsViewModel.fetchUserfeeds();
+                                          userFeedsViewModel.fetchedFetch();
                                         },
                                         child: Icon(
                                           Icons.favorite,
@@ -420,7 +437,11 @@ class _Home_pageState extends State<Home_page> {
                                           String postId = value.userFeeds.data!
                                               .userFeed[index].userPosts.id
                                               .toString();
-                                          _showBottomSheet(context, postId);
+                                          String targetUser = value.userFeeds
+                                              .data!.userFeed[index].userData.id
+                                              .toString();
+                                          _showBottomSheet(
+                                              context, postId, targetUser);
                                         },
                                         icon: const Icon(
                                             Icons.chat_bubble_outline),
@@ -448,8 +469,8 @@ class _Home_pageState extends State<Home_page> {
                                           child: Text(
                                               '${value.userFeeds.data!.userFeed[index].userPosts.likeCount.toString()} Likes')),
                                       TextButton(
-                                        onPressed: () {
-                                          Navigator.push(
+                                        onPressed: () async {
+                                          var v = await Navigator.push(
                                               context,
                                               MaterialPageRoute(
                                                   builder: (context) =>
@@ -462,6 +483,14 @@ class _Home_pageState extends State<Home_page> {
                                                             .id
                                                             .toString(),
                                                       )));
+                                          if (v != null) {
+                                            value
+                                                .userFeeds
+                                                .data!
+                                                .userFeed[index]
+                                                .userPosts
+                                                .commentCount = v;
+                                          }
                                         },
                                         child: Text(
                                             '${value.userFeeds.data!.userFeed[index].userPosts.commentCount.toString()} comments'),
@@ -485,13 +514,21 @@ class _Home_pageState extends State<Home_page> {
         }));
   }
 
-  void _showBottomSheet(BuildContext context, String postId) {
+  void _showBottomSheet(
+      BuildContext context, String postId, String targetUser) {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
         return YourBottomSheetWidget(
-            postId:
-                postId); // Replace YourBottomSheetWidget() with your actual bottom sheet widget.
+          postId: postId,
+          targetUser: targetUser,
+          onCommentPosted: (commentPostedSuccessfully) {
+            if (commentPostedSuccessfully) {
+              // Fetch the user feed when the comment is successful
+              userFeedsViewModel.fetchedFetch();
+            }
+          },
+        ); // Replace YourBottomSheetWidget() with your actual bottom sheet widget.
       },
     );
   }

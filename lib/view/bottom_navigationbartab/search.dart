@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/data/response/status.dart';
+import 'package:flutter_application_1/res/colors.dart';
 import 'package:flutter_application_1/res/component/round_button.dart';
 import 'package:flutter_application_1/view/other_user_profile.dart';
 import 'package:flutter_application_1/view_model/followviewmodel.dart';
 import 'package:flutter_application_1/view_model/search_view_modal.dart';
 import 'package:flutter_application_1/view_model/viewmodel/auth_view_model.dart';
 import 'package:flutter_application_1/view_model/viewmodel/custom_text.dart';
-
 import 'package:provider/provider.dart';
 
 class SearchPage extends StatefulWidget {
@@ -27,12 +27,16 @@ class _SearchPageState extends State<SearchPage> {
     searchUserViewModel = SearchUserViewModel();
   }
 
-  @override
   Widget build(BuildContext context) {
     final authViewModel = Provider.of<AuthViewModel>(context);
 
     return Scaffold(
       appBar: AppBar(
+        //  backgroundColor: AppColors.googlelogin,
+        title: Text(
+          "Search page",
+          style: TextStyle(color: AppColors.applelogin),
+        ),
         elevation: 0,
       ),
       body: Column(
@@ -50,10 +54,11 @@ class _SearchPageState extends State<SearchPage> {
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
           CustomRoundButton(
+            loading: searchUserViewModel.loading,
             title: "Search",
             onPress: () {
               searchUserViewModel.SeachUserProfile(
@@ -69,12 +74,16 @@ class _SearchPageState extends State<SearchPage> {
                 switch (value.searchUser.status) {
                   case Status.Loading:
                     return const Center(
-                      child: CircularProgressIndicator(
-                        color: Colors.white,
-                      ),
-                    );
+                        // child: CircularProgressIndicator(
+                        //  // color: Colors.blue,
+                        // ),
+                        );
                   case Status.Error:
-                    return Center(child: Text("No Matching Result Found"));
+                    return const Center(
+                        child: Text(
+                      "No User Found",
+                      style: TextStyle(fontSize: 20),
+                    ));
                   case Status.Success:
                     final Search = value.searchUser.data;
                     return SizedBox(
@@ -96,33 +105,28 @@ class _SearchPageState extends State<SearchPage> {
                                       ),
                                     );
                                   },
-                                  leading: const CircleAvatar(
-                                    child: Icon(
-                                      Icons.person,
-                                      size: 30,
-                                    ),
+                                  leading: CircleAvatar(
+                                    child: Search.data[index].profilePic != null
+                                        ? ClipOval(
+                                            child: Image.network(
+                                              Search.data[index].profilePic,
+                                              fit: BoxFit.cover,
+                                              width: 60,
+                                              height: 60,
+                                            ),
+                                          )
+                                        : const Icon(
+                                            Icons.person,
+                                            size: 30,
+                                          ),
                                   ),
                                   title:
                                       Text(Search.data[index].username ?? ""),
-                                  subtitle: Text(Search.data[index].id ?? ""),
-                                  trailing: SizedBox(
+                                  subtitle:
+                                      Text(Search.data[index].fullName ?? ""),
+                                  trailing: const SizedBox(
                                     height: 35,
                                     width: 90,
-                                    // child: CustomRoundButton(
-                                    //   title: '',
-                                    //   onPress: () {
-                                    //     followUserViewModel.followUserApi(
-                                    //         Search.data[index].id.toString(),
-                                    //         context);
-                                    //     // final followUser =
-                                    //     //     Provider.of<FollowUserViewModel>(
-                                    //     //         context,
-                                    //     //         listen: false);
-                                    //     // String data =
-                                    //     //     Search.data[index].id.toString();
-                                    //     // followUser.followUserApi(data, context);
-                                    //   },
-                                    // ),
                                   ),
                                 );
                               },

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/data/response/api_response.dart';
 import 'package:flutter_application_1/model/likeList.dart';
-import 'package:flutter_application_1/model/show_followers.dart';
+//import 'package:flutter_application_1/model/show_followers.dart';
 import 'package:flutter_application_1/respository/likeList_repository.dart';
-import 'package:flutter_application_1/respository/user_follower_reposotory.dart';
+//import 'package:flutter_application_1/respository/user_follower_reposotory.dart';
 
 class LikelistViewModel with ChangeNotifier {
   final _myRepo = LikelistRepository();

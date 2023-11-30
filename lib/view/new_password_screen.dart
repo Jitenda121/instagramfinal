@@ -87,18 +87,11 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 // }
                 onPress: () async {
                   if (_formKey.currentState!.validate()) {
-                    // Passwords are valid, proceed with reset logic
-
-                    // Navigator.pushNamed(context, RoutesName.loginscreen);
-                    // final authViewModel =
-                    //     Provider.of<AuthViewModel>(context, listen: false);
-                    //String authToken = await authViewModel.getToken();
-
                     Map data = {
                       "newPassword": password.text.toString().trim(),
-                      //"authToken": authToken,
+                    
                     };
-                    debugPrint("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!@#^");
+                    //debugPrint("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!@#^");
 
                     authViewModel.resetPassword(data, context);
                     debugPrint(data.toString());

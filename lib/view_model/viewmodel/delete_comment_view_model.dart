@@ -10,13 +10,13 @@ class DeleteCommentViewModel with ChangeNotifier {
   Future<void> deleteCommentApi(dynamic postId,dynamic commentId ,BuildContext context) async {
     _myRepo.deleteComment(postId,commentId).then((value) {
       Utils.toastMessage(
-        'Report successful',
+        'Delete successful',
       );
 
       // debugPrint("like user api call 2 Success");
 
       Utils.toastMessage(
-        'Report successful',
+        'Delete successful',
       );
 
       if (kDebugMode) {

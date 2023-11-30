@@ -47,7 +47,7 @@ class Routes {
             builder: (BuildContext context) => const HomePage());
       case RoutesName.homepage1:
         return MaterialPageRoute(
-            builder: (BuildContext context) => const Home_page());
+            builder: (BuildContext context) => const HomePage());
 
       case RoutesName.otp:
         if (settings.arguments != null) {

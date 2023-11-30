@@ -40,8 +40,14 @@ class _ImageViewScreenState extends State<ImageViewScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColors.applelogin,
-        title: Text('Image View'),
+        backgroundColor: AppColors.googlelogin,
+        title: Text(
+          'Image View',
+          style: TextStyle(color: AppColors.applelogin),
+        ),
+        centerTitle: true,
+        automaticallyImplyLeading: true,
+        iconTheme: IconThemeData(color: AppColors.applelogin),
       ),
       body: ChangeNotifierProvider<GetUserProfileViewModel>(
         create: (BuildContext context) => getUserProfileViewModel,
@@ -68,7 +74,7 @@ class _ImageViewScreenState extends State<ImageViewScreen> {
                         padding: const EdgeInsets.all(16.0),
                         child: Row(
                           children: [
-Text(
+                            Text(
                               "Edit caption",
                               style: TextStyle(
                                   fontSize: 20,
@@ -96,15 +102,15 @@ Text(
                           Image.network(
                             widget.imageUrl,
                             fit: BoxFit.cover,
-                            height: 300,
+                            height: MediaQuery.of(context).size.height * .25,
                           ),
                         ],
                       ),
 
-                      // Caption
+                     
                       if (isEditingCaption)
                         Padding(
-                          padding: const EdgeInsets.only(left: 20, top: 20),
+                          padding: const EdgeInsets.only(left: 20, top: 10),
                           child: Row(
                             children: [
                               Expanded(
@@ -116,31 +122,35 @@ Text(
                                 ),
                               ),
                               IconButton(
-                                onPressed: () {
+                                onPressed: () async {
                                   // Save the edited caption
                                   // You can add the logic here to save the caption
                                   Map data = {
                                     "caption": captionController.text.toString()
                                   };
-                                  editPostViewModel.editpostApi(
-                                      value.getUserPost.data!.data.posts[0].id
-                                          .toString(),
-                                      data,
-                                      context);
+                                  bool success =
+                                      await editPostViewModel.editpostApi(
+                                          value.getUserPost.data!.data.posts[0]
+                                              .id
+                                              .toString(),
+                                          data,
+                                          context);
                                   setState(() {
                                     isEditingCaption = false;
                                   });
-                                  getUserProfileViewModel
-                                      .fetchUserProfile(widget.postId);
+                                  if (success) {
+                                    getUserProfileViewModel
+                                        .fetchUserProfile(widget.postId);
+                                  }
                                 },
                                 icon: Icon(Icons.save),
                               ),
                             ],
                           ),
                         )
-else
+                      else
                         Padding(
-                          padding: const EdgeInsets.only(left: 20, top: 20),
+                          padding: const EdgeInsets.only(left: 20, top: 10),
                           child: Text(
                             "Caption: ${value.getUserPost.data!.data.posts[0].caption}",
                             style: TextStyle(
@@ -152,16 +162,16 @@ else
 
                       // Like and Comment Counts
                       Padding(
-                        padding: const EdgeInsets.only(left: 20, top: 30),
+                        padding: const EdgeInsets.only(left: 20, top: 10),
                         child: Row(
                           children: [
                             Row(
                               children: [
-                                Icon(Icons.favorite, color: Colors.blue),
+                                Icon(Icons.favorite, color: Colors.red),
                                 SizedBox(width: 5),
                                 Text(
                                   '${value.getUserPost.data!.data.posts[0].likeCount} Likes',
-                                  style: TextStyle(color: Colors.blue),
+                                  style: TextStyle(color: Colors.red),
                                 ),
                               ],
                             ),
@@ -170,11 +180,11 @@ else
                             ),
                             Row(
                               children: [
-                                Icon(Icons.chat_bubble, color: Colors.blue),
+                                Icon(Icons.chat_bubble, color: Colors.red),
                                 SizedBox(width: 5),
                                 Text(
                                   '${value.getUserPost.data!.data.posts[0].commentCount} Comments',
-                                  style: TextStyle(color: Colors.blue),
+                                  style: TextStyle(color: Colors.red),
                                 ),
                               ],
                             ),
@@ -183,12 +193,13 @@ else
                       ),
 
                       // Delete Post Button
-                      SizedBox(
-                        height: 20,
-                      ),
+                      // SizedBox(
+                      //   height: 20,
+                      // ),
                       CustomRoundButton(
+                          loading: authViewModel.loading,
                           title: "Delete Post",
-                          onPress: () {
+                          onPress: () async {
                             showDialog(
                               context: context,
                               builder: (BuildContext context) {
@@ -205,12 +216,15 @@ else
                                     ),
                                     TextButton(
                                       child: Text("Delete"),
-                                      onPressed: () {
+                                      onPressed: () async {
                                         Map data = {
                                           "postId": widget.postId.toString()
                                         };
-                                        authViewModel.deletePost(data, context);
                                         Navigator.of(context).pop();
+
+                                        await authViewModel.deletePost(
+                                            data, context);
+                                       
                                       },
                                     ),
                                   ],
@@ -218,13 +232,10 @@ else
                               },
                             );
                           }),
-                      SizedBox(
-                        height: 20,
-                      ),
                     ],
                   ),
                 );
-default:
+              default:
                 return Container();
             }
           },

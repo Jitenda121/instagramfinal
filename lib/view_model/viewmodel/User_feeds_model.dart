@@ -11,8 +11,20 @@ class UserFeedsViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> fetchUserfeeds() async {
+  Future<void> fetchUserfeeds({bool isLoading = true}) async {
     setUserfeed(ApiResponse.loading());
+    debugPrint("in Fetch feeds");
+    _myRepo.getUserfeeds().then((value) {
+      setUserfeed(ApiResponse.success(value));
+      debugPrint(value.toString());
+    }).onError((error, stackTrace) {
+      debugPrint("in Fetch feeds on Error");
+      debugPrint(error.toString());
+      setUserfeed(ApiResponse.error(error.toString()));
+    });
+  }
+
+  Future<void> fetchedFetch({bool isLoading = true}) async {
     debugPrint("in Fetch feeds");
     _myRepo.getUserfeeds().then((value) {
       setUserfeed(ApiResponse.success(value));

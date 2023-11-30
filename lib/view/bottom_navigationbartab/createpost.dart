@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/data/network/aws.dart';
 import 'package:flutter_application_1/provider/home_view_model.dart';
+import 'package:flutter_application_1/res/colors.dart';
 import 'package:flutter_application_1/res/component/round_button.dart';
 
 import 'package:flutter_application_1/view_model/viewmodel/auth_view_model.dart';
@@ -21,35 +22,37 @@ class _CreatePostState extends State<CreatePost> {
   //File? pickedImage;
   final ImagePicker _imagePicker = ImagePicker();
   File? _pickedImage;
-
+//
   bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) {
     final TextEditingController searchController = TextEditingController();
     final authViewModel = Provider.of<AuthViewModel>(context);
-   // final ImageUpload imageUpload = ImageUpload();
+    // final ImageUpload imageUpload = ImageUpload();
 
     return Stack(
       children: [
         Scaffold(
           appBar: AppBar(
-            backgroundColor: Colors.blue,
+            backgroundColor: Colors.white,
             elevation: 3,
-            title: const Text(
+            title: Text(
               "CREATE POST",
               style: TextStyle(
-                fontSize: 15,
-                color: Colors.black,
+                fontSize: 20,
+                color: AppColors.applelogin,
               ),
             ),
+            //
             bottom: PreferredSize(
               preferredSize: const Size.fromHeight(4.0),
               child: _isLoading
                   ? const LinearProgressIndicator(
                       color: Colors.red,
                     )
-                  : const PreferredSize(preferredSize: Size.zero, child: SizedBox()),
+                  : const PreferredSize(
+                      preferredSize: Size.zero, child: SizedBox()),
             ),
           ),
           body: Container(
@@ -60,7 +63,6 @@ class _CreatePostState extends State<CreatePost> {
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.02,
                 ),
-                
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.02,
                 ),
@@ -92,7 +94,6 @@ class _CreatePostState extends State<CreatePost> {
                         );
                       },
                     );
-                    
                   },
                   child: Container(
                     decoration:
@@ -105,7 +106,10 @@ class _CreatePostState extends State<CreatePost> {
                             fit: BoxFit.cover,
                           )
                         : const Center(
-                            child: Text('Tap to pick an image'),
+                            child: Icon(
+                              Icons.camera,
+                              size: 60,
+                            ),
                           ),
                   ),
                 ),
@@ -115,8 +119,8 @@ class _CreatePostState extends State<CreatePost> {
                 SizedBox(
                   width: MediaQuery.of(context).size.width * 0.95,
                   child: TextFormField(
-                    decoration:
-                        const InputDecoration(hintText: "Write What's on Your Mind"),
+                    decoration: const InputDecoration(
+                        hintText: "Write What's on Your Mind"),
                     controller: searchController,
                   ),
                 ),
@@ -129,7 +133,7 @@ class _CreatePostState extends State<CreatePost> {
                     if (searchController.text.isEmpty || _pickedImage == null) {
                       return;
                     }
-
+//
                     setState(() {
                       _isLoading = true;
                     });
@@ -154,7 +158,8 @@ class _CreatePostState extends State<CreatePost> {
                             Provider.of<HomeViewModel>(context, listen: false);
                         homeProvider.setIndex(0);
                       }
-                    } catch (error) {
+                    } 
+                    catch (error) {
                       // print(error);
                     } finally {
                       setState(() {

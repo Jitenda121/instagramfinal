@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/data/response/status.dart';
+import 'package:flutter_application_1/res/colors.dart';
+import 'package:flutter_application_1/view/other_user_profile.dart';
 import 'package:flutter_application_1/view_model/other_user_followers_view_modal.dart';
 
 import 'package:provider/provider.dart';
@@ -32,7 +34,13 @@ class _OtherUserFollowersState extends State<OtherUserFollowers> {
     // final unFollowUserViewModel = Provider.of<UnFollowUserViewModel>(context);
     return Scaffold(
         appBar: AppBar(
-          title: const Text("followers"),
+          automaticallyImplyLeading: true,
+          iconTheme: IconThemeData(color: AppColors.applelogin),
+          backgroundColor: AppColors.googlelogin,
+          title: Text(
+            "followers",
+            style: TextStyle(color: AppColors.applelogin),
+          ),
         ),
         body: ChangeNotifierProvider<OtherUserFollowerViewModel>(
             create: (BuildContext context) => otherUserFollowerViewModel,
@@ -62,17 +70,30 @@ class _OtherUserFollowersState extends State<OtherUserFollowers> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              OtherUserFollowers(
+                                              OtherUserProfile(
                                                   userId: followers.data
                                                       .followers[index].user.id
                                                       .toString())));
                                 },
-                                leading: const CircleAvatar(
-                                  child: Icon(
-                                    Icons.person,
-                                    size: 30,
-                                  ),
+                                leading: CircleAvatar(
+                                  child: followers.data.followers[index].user
+                                              .profilePic !=
+                                          null
+                                      ? ClipOval(
+                                          child: Image.network(
+                                            followers.data.followers[index].user
+                                                .profilePic,
+                                            fit: BoxFit.cover,
+                                            width: 60,
+                                            height: 60,
+                                          ),
+                                        )
+                                      : Icon(
+                                          Icons.person,
+                                          size: 30,
+                                        ),
                                 ),
+
                                 title: Text(followers
                                         .data.followers[index].user.username ??
                                     ""),

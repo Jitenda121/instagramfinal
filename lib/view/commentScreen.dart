@@ -1,9 +1,7 @@
-//import 'dart:html';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/data/response/status.dart';
-import 'package:flutter_application_1/respository/edit_comment_repository.dart';
-import 'package:flutter_application_1/view_model/viewmodel/Likelist_view_model.dart';
+//import 'package:flutter_application_1/respository/edit_comment_repository.dart';
+//import 'package:flutter_application_1/view_model/viewmodel/Likelist_view_model.dart';
 import 'package:flutter_application_1/view_model/viewmodel/comment_list_view_model.dart';
 import 'package:flutter_application_1/view_model/viewmodel/delete_comment_view_model.dart';
 import 'package:flutter_application_1/view_model/viewmodel/edit_comment_view_modal.dart';
@@ -32,14 +30,21 @@ class _CommentScreenState extends State<CommentScreen> {
 
   @override
   Widget build(BuildContext context) {
+    
     // final unFollowUserViewModel = Provider.of<UnFollowUserViewModel>(context);
     return Scaffold(
         appBar: AppBar(
+          leading: GestureDetector(
+            
+            onTap: ()=>Navigator.pop(context,),
+            child: const Icon(Icons.arrow_back)),
           title: const Text("Comments"),
         ),
         body: ChangeNotifierProvider<CommentlistViewModel>(
             create: (BuildContext context) => commentlistViewModel,
-            child: Consumer<CommentlistViewModel>(builder: (context, value, _) {
+            child: 
+            
+            Consumer<CommentlistViewModel>(builder: (context, value, _) {
               switch (value.listList.status) {
                 case Status.Loading:
                   debugPrint("hello");
@@ -52,7 +57,10 @@ class _CommentScreenState extends State<CommentScreen> {
                 case Status.Success:
                   debugPrint("Success");
                   final followers = value.listList.data;
-                  return SizedBox(
+                  return 
+                  
+                  
+                  SizedBox(
                     child: followers!.data.comments.isEmpty
                         ? const Center(
                             child: Text("No Comment"),
@@ -127,7 +135,10 @@ class _CommentScreenState extends State<CommentScreen> {
                 default:
                   return Container();
               }
-            })));
+            }
+            )
+            )
+            );
   }
 
   Future<void> _openOptionsDialog(
@@ -203,6 +214,7 @@ class _CommentScreenState extends State<CommentScreen> {
 
                           editCommentViewModel.editCommentApi(
                               widget.postId, commentId, data, context);
+
                           commentlistViewModel.fetchCommentlist(widget.postId);
                           Navigator.pop(context); // Close the dialog
                         },
@@ -219,3 +231,7 @@ class _CommentScreenState extends State<CommentScreen> {
     );
   }
 }
+
+
+
+

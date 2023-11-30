@@ -133,20 +133,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     );
                   },
                 ),
-                // CustomTextField(
-                //   hintText: "Password",
-                //   // keyboardType: TextInputType.emailAddress,
-                //   controller: passwordController,
-                //   validator: (value) {
-                //     if (value == null || value.isEmpty) {
-                //       return "password cannot be empty";
-                //     }
-                //     return null;
-                //     // return null;
-                //     // Add password validation logic here
-                //   },
-                //   prefixIcon: Icons.lock,
-                // ),
+                
                 SizedBox(
                   height: MediaQuery.of(context).size.height * .009,
                 ),

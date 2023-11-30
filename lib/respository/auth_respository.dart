@@ -1,18 +1,14 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/data/network/base_api_services.dart';
 import 'package:flutter_application_1/data/network/network_services.dart';
 import 'package:flutter_application_1/res/component/app_url.dart';
 import 'package:flutter_application_1/respository/shared_preference.dart';
-import 'package:flutter_application_1/utils/utils.dart';
-import 'package:flutter_application_1/view/forget_password.dart';
 import 'package:http/http.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
+
 
 class AuthRepository {
   //final  String token1=verifyOtpApi(data).toString();
-  BaseApiServices _apiServices = NetworkApiService();
+  final BaseApiServices _apiServices = NetworkApiService();
   Future<dynamic> loginapi(dynamic data) async {
     try {
       dynamic response = await _apiServices.getPostApiResponse(
@@ -55,23 +51,7 @@ class AuthRepository {
       rethrow;
     }
   }
-
-  // Future<bool> verifyOtpApi(dynamic data) async {
-  //   try {
-  //     // Replace 'AppUrl.verifyOtpApi' with your actual OTP verification API endpoint
-  //     dynamic response = await _apiServices.getPostApiResponse(
-  //         AppUrl.verifyOtpApi, data,
-  //         header: {"Content-Type": "application/json; charset=UTF-8"});
-
-  //     // Assuming your API response contains a key 'isValid' indicating whether the OTP is valid or not
-  //     bool isValid = response['isValid'] ?? true;
-
-  //     return isValid;
-  //   } catch (e) {
-  //     rethrow;
-  //   }
-  // }
-  Future<bool> verifyOtpApi(dynamic data) async {
+Future<bool> verifyOtpApi(dynamic data) async {
     try {
       // Replace 'AppUrl.verifyOtpApi' with your actual OTP verification API endpoint
       dynamic response = await _apiServices.getPostApiResponse(

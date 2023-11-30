@@ -7,8 +7,8 @@ class FollowingModel {
   late final int statusCode;
   late final String type;
   late final Data data;
-
-  FollowingModel.fromJson(Map<String, dynamic> json) {
+  
+  FollowingModel.fromJson(Map<String, dynamic> json){
     statusCode = json['statusCode'];
     type = json['type'];
     data = Data.fromJson(json['data']);
@@ -28,15 +28,14 @@ class Data {
     required this.following,
   });
   late final List<Following> following;
-
-  Data.fromJson(Map<String, dynamic> json) {
-    following =
-        List.from(json['Following']).map((e) => Following.fromJson(e)).toList();
+  
+  Data.fromJson(Map<String, dynamic> json){
+    following = List.from(json['Following']).map((e)=>Following.fromJson(e)).toList();
   }
 
   Map<String, dynamic> toJson() {
     final _data = <String, dynamic>{};
-    _data['Following'] = following.map((e) => e.toJson()).toList();
+    _data['Following'] = following.map((e)=>e.toJson()).toList();
     return _data;
   }
 }
@@ -46,8 +45,8 @@ class Following {
     required this.user,
   });
   late final User user;
-
-  Following.fromJson(Map<String, dynamic> json) {
+  
+  Following.fromJson(Map<String, dynamic> json){
     user = User.fromJson(json['User']);
   }
 
@@ -63,17 +62,20 @@ class User {
     required this.id,
     required this.username,
     required this.email,
+    required this.profilePic,
     required this.accountVerify,
   });
   late final String id;
   late final String username;
   late final String email;
+  late final String profilePic;
   late final int accountVerify;
-
-  User.fromJson(Map<String, dynamic> json) {
+  
+  User.fromJson(Map<String, dynamic> json){
     id = json['_id'];
     username = json['username'];
     email = json['email'];
+    profilePic = json['profilePic'];
     accountVerify = json['accountVerify'];
   }
 
@@ -82,6 +84,7 @@ class User {
     _data['_id'] = id;
     _data['username'] = username;
     _data['email'] = email;
+    _data['profilePic'] = profilePic;
     _data['accountVerify'] = accountVerify;
     return _data;
   }

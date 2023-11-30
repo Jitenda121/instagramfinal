@@ -62,46 +62,62 @@ class _FollowersScreenState extends State<FollowersScreen> {
                             itemCount: followers.data.followers.length,
                             itemBuilder: (context, index) {
                               return ListTile(
-                                  onTap: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                OtherUserProfile(
-                                                    userId: followers
-                                                        .data
-                                                        .followers[index]
-                                                        .user
-                                                        .id
-                                                        .toString())));
-                                  },
-                                  leading: const CircleAvatar(
-                                    child: Icon(
-                                      Icons.person,
-                                      size: 30,
-                                    ),
-                                  ),
-                                  title: Text(followers.data.followers[index]
-                                          .user.username ??
-                                      ""),
-                                  subtitle: Text(followers
-                                          .data.followers[index].user.email ??
-                                      ""),
-                                  trailing: SizedBox(
-                                      height: 35,
-                                      width: 90,
-                                      child: CustomRoundButton(
-                                        // loading: unFollowUserViewModel.removeLoading,
-                                        title: "Remove",
-                                        onPress: () {
-                                          // unFollowUserViewModel.unFollowApi(
-                                          //     followers.data[index].userId
-                                          //         .toString(),
-                                          //     context);
-                                        },
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              OtherUserProfile(
+                                                  userId: followers.data
+                                                      .followers[index].user.id
+                                                      .toString())));
+                                },
+                                // leading: CircleAvatar(
+                                //   child: Icon(
+                                //     Icons.person,
+                                //     size: 30,
+                                //   ),
+                                // ),
+                                leading: CircleAvatar(
+                                  child: followers.data.followers[index].user
+                                              .profilePic !=
+                                          null
+                                      ? ClipOval(
+                                          child: Image.network(
+                                            followers.data.followers[index].user
+                                                .profilePic,
+                                            fit: BoxFit.cover,
+                                            width: 60,
+                                            height: 60,
+                                          ),
+                                        )
+                                      : Icon(
+                                          Icons.person,
+                                          size: 30,
+                                        ),
+                                ),
+                                title: Text(followers
+                                        .data.followers[index].user.username ??
+                                    ""),
+                                subtitle: Text(followers
+                                        .data.followers[index].user.email ??
+                                    ""),
+                                // trailing: SizedBox(
+                                //     height: 35,
+                                //     width: 90,
+                                //     child: CustomRoundButton(
+                                //       // loading: unFollowUserViewModel.removeLoading,
+                                //       title: "Remove",
+                                //       onPress: () {
+                                //         // unFollowUserViewModel.unFollowApi(
+                                //         //     followers.data[index].userId
+                                //         //         .toString(),
+                                //         //     context);
+                                //       },
 
-                                        // unFollowUserViewModel.unFollowApi(followers.data[index].userId.toString(), context);
-                                      )));
+                                //       // unFollowUserViewModel.unFollowApi(followers.data[index].userId.toString(), context);
+                                //     ))
+                              );
                             }),
                   );
                 default:

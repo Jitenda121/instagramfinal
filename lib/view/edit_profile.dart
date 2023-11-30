@@ -3,10 +3,7 @@ import 'dart:typed_data';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/data/network/aws.dart';
-import 'package:flutter_application_1/provider/home_view_model.dart';
-import 'package:flutter_application_1/provider/imagedelete.dart';
 import 'package:flutter_application_1/res/component/round_button.dart';
-import 'package:flutter_application_1/utils/routes/routes_name.dart';
 import 'package:flutter_application_1/view_model/user_view_model.dart';
 import 'package:flutter_application_1/view_model/viewmodel/custom_text.dart';
 import 'package:flutter_application_1/view_model/viewmodel/patch_view_model.dart';
@@ -30,6 +27,8 @@ class _EditProfileState extends State<EditProfile> {
   TextEditingController fullNameController = TextEditingController();
   TextEditingController biocontroller = TextEditingController();
   EditViewModel editprofile = EditViewModel();
+  // UserProfileViewModel userProfileViewModel = UserProfileViewModel();
+
   bool _isLoading = false;
   UserProfileViewModel userProfileViewModel = UserProfileViewModel();
 
@@ -57,7 +56,9 @@ class _EditProfileState extends State<EditProfile> {
             ),
             leading: GestureDetector(
               onTap: () {
+               userProfileViewModel.fetchUserProfile();
                 Navigator.pop(context);
+               // userProfileViewModel.fetchUserProfile();
               },
               child: const Icon(
                 Icons.close,
@@ -187,13 +188,14 @@ class _EditProfileState extends State<EditProfile> {
                                 };
                                 debugPrint("api hit");
                                 await editProfile.editProfileApi(data, context);
-                                // Navigator.pop(context);
-                                // Navigator.pushNamed(
-                                //     context, RoutesName.editprofile);
-
                                 setState(() {
                                   _isLoading = false;
                                 });
+
+                                // final edit = Provider.of<UserProfileViewModel>(
+                                //     context,
+                                //     listen: false);
+                                // edit.fetchUserProfile();
                               },
                             ),
                           ],
@@ -235,4 +237,3 @@ class _EditProfileState extends State<EditProfile> {
     }
   }
 }
-

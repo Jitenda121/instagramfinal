@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/data/response/status.dart';
+import 'package:flutter_application_1/res/colors.dart';
 import 'package:flutter_application_1/res/component/round_button.dart';
 import 'package:flutter_application_1/view/other_user_profile.dart';
 import 'package:flutter_application_1/view_model/otherUserFollowing.dart';
@@ -34,7 +35,13 @@ class _OtherUserFollowingState extends State<OtherUserFollowing> {
     // final unFollowUserViewModel = Provider.of<UnFollowUserViewModel>(context);
     return Scaffold(
         appBar: AppBar(
-          title: const Text(" other following"),
+          backgroundColor: AppColors.googlelogin,
+          automaticallyImplyLeading: true,
+          iconTheme: IconThemeData(color: AppColors.applelogin),
+          title: Text(
+            " other following",
+            style: TextStyle(color: AppColors.applelogin),
+          ),
         ),
         body: ChangeNotifierProvider<OtherUserFollowingViewModel>(
             create: (BuildContext context) => otherUserFollowingViewModel,
@@ -74,11 +81,23 @@ class _OtherUserFollowingState extends State<OtherUserFollowing> {
                                                         .id
                                                         .toString())));
                                   },
-                                  leading: const CircleAvatar(
-                                    child: Icon(
-                                      Icons.person,
-                                      size: 30,
-                                    ),
+                                  leading: CircleAvatar(
+                                    child: followers.data.following[index].user
+                                                .profilePic !=
+                                            null
+                                        ? ClipOval(
+                                            child: Image.network(
+                                              followers.data.following[index]
+                                                  .user.profilePic,
+                                              fit: BoxFit.cover,
+                                              width: 60,
+                                              height: 60,
+                                            ),
+                                          )
+                                        : Icon(
+                                            Icons.person,
+                                            size: 30,
+                                          ),
                                   ),
                                   title: Text(followers.data.following[index]
                                           .user.username ??

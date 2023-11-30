@@ -5,17 +5,17 @@ class FollowersModel {
     required this.data,
   });
   late final int statusCode;
-  late final dynamic type;
+  late final String type;
   late final Data data;
   
-  FollowersModel.fromJson(Map<dynamic, dynamic> json){
+  FollowersModel.fromJson(Map<String, dynamic> json){
     statusCode = json['statusCode'];
     type = json['type'];
     data = Data.fromJson(json['data']);
   }
 
-  Map<dynamic, dynamic> toJson() {
-    final _data = <dynamic, dynamic>{};
+  Map<String, dynamic> toJson() {
+    final _data = <String, dynamic>{};
     _data['statusCode'] = statusCode;
     _data['type'] = type;
     _data['data'] = data.toJson();
@@ -29,12 +29,12 @@ class Data {
   });
   late final List<Followers> followers;
   
-  Data.fromJson(Map<dynamic, dynamic> json){
+  Data.fromJson(Map<String, dynamic> json){
     followers = List.from(json['Followers']).map((e)=>Followers.fromJson(e)).toList();
   }
 
-  Map<dynamic, dynamic> toJson() {
-    final _data = <dynamic, dynamic>{};
+  Map<String, dynamic> toJson() {
+    final _data = <String, dynamic>{};
     _data['Followers'] = followers.map((e)=>e.toJson()).toList();
     return _data;
   }
@@ -46,12 +46,12 @@ class Followers {
   });
   late final User user;
   
-  Followers.fromJson(Map<dynamic, dynamic> json){
+  Followers.fromJson(Map<String, dynamic> json){
     user = User.fromJson(json['User']);
   }
 
-  Map<dynamic, dynamic> toJson() {
-    final _data = <dynamic, dynamic>{};
+  Map<String, dynamic> toJson() {
+    final _data = <String, dynamic>{};
     _data['User'] = user.toJson();
     return _data;
   }
@@ -62,25 +62,29 @@ class User {
     required this.id,
     required this.username,
     required this.email,
+    required this.profilePic,
     required this.accountVerify,
   });
-  late final dynamic id;
-  late final dynamic username;
-  late final dynamic email;
+  late final String id;
+  late final String username;
+  late final String email;
+  late final String profilePic;
   late final int accountVerify;
   
-  User.fromJson(Map<dynamic, dynamic> json){
+  User.fromJson(Map<String, dynamic> json){
     id = json['_id'];
     username = json['username'];
     email = json['email'];
+    profilePic = json['profilePic'];
     accountVerify = json['accountVerify'];
   }
 
-  Map<dynamic, dynamic> toJson() {
-    final _data = <dynamic, dynamic>{};
+  Map<String, dynamic> toJson() {
+    final _data = <String, dynamic>{};
     _data['_id'] = id;
     _data['username'] = username;
     _data['email'] = email;
+    _data['profilePic'] = profilePic;
     _data['accountVerify'] = accountVerify;
     return _data;
   }

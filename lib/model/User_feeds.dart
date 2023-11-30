@@ -7,18 +7,19 @@ class UserFeeds {
   late final int statusCode;
   late final String type;
   late final List<UserFeed> userFeed;
-  
-  UserFeeds.fromJson(Map<String, dynamic> json){
+
+  UserFeeds.fromJson(Map<String, dynamic> json) {
     statusCode = json['statusCode'];
     type = json['type'];
-    userFeed = List.from(json['user_Feed']).map((e)=>UserFeed.fromJson(e)).toList();
+    userFeed =
+        List.from(json['user_Feed']).map((e) => UserFeed.fromJson(e)).toList();
   }
 
   Map<String, dynamic> toJson() {
     final _data = <String, dynamic>{};
     _data['statusCode'] = statusCode;
     _data['type'] = type;
-    _data['user_Feed'] = userFeed.map((e)=>e.toJson()).toList();
+    _data['user_Feed'] = userFeed.map((e) => e.toJson()).toList();
     return _data;
   }
 }
@@ -30,8 +31,8 @@ class UserFeed {
   });
   late final UserData userData;
   late final UserPosts userPosts;
-  
-  UserFeed.fromJson(Map<String, dynamic> json){
+
+  UserFeed.fromJson(Map<String, dynamic> json) {
     userData = UserData.fromJson(json['UserData']);
     userPosts = UserPosts.fromJson(json['UserPosts']);
   }
@@ -57,8 +58,8 @@ class UserData {
   late final String email;
   late final String fullName;
   late final String profilePic;
-  
-  UserData.fromJson(Map<String, dynamic> json){
+
+  UserData.fromJson(Map<String, dynamic> json) {
     id = json['_id'];
     username = json['username'];
     email = json['email'];
@@ -94,12 +95,12 @@ class UserPosts {
   late final String url;
   late final String mediaType;
   late final String caption;
-  late final int likeCount;
+  late int likeCount;
   late final int commentCount;
   late final String createdAt;
-  late final bool isLiked;
-  
-  UserPosts.fromJson(Map<String, dynamic> json){
+  late bool isLiked;
+
+  UserPosts.fromJson(Map<String, dynamic> json) {
     id = json['_id'];
     userId = json['userId'];
     url = json['url'];

@@ -1,16 +1,8 @@
-//import 'dart:js';
-
-//import 'dart:js';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/respository/shared_preference.dart';
 import 'package:flutter_application_1/utils/routes/routes_name.dart';
-import 'package:flutter_application_1/view/bottom_navigationbartab/home.dart';
-import 'package:flutter_application_1/view/forget_password.dart';
 import 'package:flutter_application_1/view/otp_screen.dart';
-import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../../respository/auth_respository.dart';
 import '../../utils/utils.dart';
 
@@ -249,6 +241,7 @@ class AuthViewModel with ChangeNotifier {
       debugPrint(s1);
 
       // Navigate to the login screen after successful logout.
+      // ignore: use_build_context_synchronously
       Navigator.pushNamedAndRemoveUntil(
           context, RoutesName.login, (routes) => false);
 
@@ -257,6 +250,7 @@ class AuthViewModel with ChangeNotifier {
     } catch (error) {
       // If there's an error during logout, handle it and display an error message.
       setLoading(false);
+      // ignore: use_build_context_synchronously
       Utils.flashBarErrorMessage('Error during logout: $error', context);
       if (kDebugMode) {
         print(error.toString());

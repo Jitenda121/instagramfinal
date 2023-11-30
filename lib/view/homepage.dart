@@ -23,7 +23,6 @@ class _HomePageState extends State<HomePage> {
     const Home_page(),
     const SearchPage(),
     const CreatePost(),
-    //const Gallary(),
     const OwnerProfile(),
   ];
   @override
@@ -50,12 +49,13 @@ class _BottomNavigationBarWidgetState extends State<BottomNavigationBarWidget> {
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
+      elevation: 40,
       currentIndex: Provider.of<HomeViewModel>(context).selectedIndex,
       type: BottomNavigationBarType.fixed,
       onTap: (index) {
         Provider.of<HomeViewModel>(context, listen: false).setIndex(index);
       },
-      items: [
+      items: const [
         BottomNavigationBarItem(
           icon: Icon(Icons.home),
           label: "Home",
@@ -68,10 +68,6 @@ class _BottomNavigationBarWidgetState extends State<BottomNavigationBarWidget> {
           icon: Icon(Icons.add),
           label: "CreatePost",
         ),
-        // BottomNavigationBarItem(
-        //   icon: Icon(Icons.image),
-        //   label: "Gallery",
-        // ),
         BottomNavigationBarItem(
           icon: Icon(Icons.person),
           label: "Profile",
